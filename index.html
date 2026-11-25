@@ -338,26 +338,29 @@ async function serverSave({silent=false}={}) {
 }
 function participantsView() {
   return `<div class="panel"><div class="panel-head"><div><h2>참가인원 관리</h2><div class="desc">팀 이름을 등록하고 대회 참가 목록을 관리하세요.</div></div><span class="pill">${state.teams.length}팀 등록</span></div>
-    <form id="addTeamForm" class="rowform"><input id="teamInput" maxlength="40" placeholder="팀 이름 입력 (예: 서울 FC)" required><button class="btn btn-primary">+ 참가 등록</button></form>
-    <div class="pills"><button class="btn btn-muted" id="sampleTeams">예시 팀 8개 불러오기</button><button class="btn btn-danger" id="clearAll">전체 초기화</button></div>
-    ${state.teams.length ? `<div class="table-wrap"><table><thead><tr><th style="width:55px">번호</th><th>참가 팀</th><th class="num">관리</th></tr></thead><tbody>${state.teams.map((team,i)=>`<tr><td>${i+1}</td><td class="team">${esc(team)}</td><td class="num"><button class="btn btn-danger btn-small" data-remove-team="${i}">삭제</button></td></tr>`).join('')}</tbody></table></div>` : '<div class="empty">아직 등록된 참가 팀이 없습니다.<br>팀 이름을 입력하거나 예시 팀을 불러오세요.</div>'}
+    ${adminUnlocked ? `<form id="addTeamForm" class="rowform"><input id="teamInput" maxlength="40" placeholder="팀 이름 입력 (예: 서울 FC)" required><button class="btn btn-primary">+ 참가 등록</button></form>
+    <div class="pills"><button class="btn btn-muted" id="sampleTeams">예시 팀 8개 불러오기</button><button class="btn btn-danger" id="clearAll">전체 초기화</button></div>` : `<div class="admin-lock">관리자 전용 메뉴입니다. 참가 팀을 추가·삭제하거나 전체 초기화하려면 관리자 로그인이 필요합니다.</div>`}
+    ${state.teams.length ? `<div class="table-wrap"><table><thead><tr><th style="width:55px">번호</th><th>참가 팀</th>${adminUnlocked?'<th class="num">관리</th>':''}</tr></thead><tbody>${state.teams.map((team,i)=>`<tr><td>${i+1}</td><td class="team">${esc(team)}</td>${adminUnlocked?`<td class="num"><button class="btn btn-danger btn-small" data-remove-team="${i}">삭제</button></td>`:''}</tr>`).join('')}</tbody></table></div>` : '<div class="empty">아직 등록된 참가 팀이 없습니다.</div>'}
   </div>`;
 }
 function addTeam(event) {
-  event.preventDefault(); const input = $('#teamInput'); const name = input.value.trim();
+  event.preventDefault(); if (!requireAdmin()) return; const input = $('#teamInput'); const name = input.value.trim();
   if (!name) return;
   if (state.teams.some(t => t.toLocaleLowerCase() === name.toLocaleLowerCase())) { toast('이미 등록된 팀 이름입니다.'); return; }
   state.teams.push(name); resetCompetition(); markDirty(); render();
 }
 function addSampleTeams() {
+  if (!requireAdmin()) return;
   ['서울 FC','부산 아이파크','수원 블루윙즈','울산 HD','전북 현대','대전 하나','포항 스틸러스','광주 FC'].forEach(name => { if (!state.teams.includes(name)) state.teams.push(name); });
   resetCompetition(); markDirty(); render();
 }
 function removeTeam(index) {
+  if (!requireAdmin()) return;
   if (!window.confirm(`${state.teams[index]} 팀을 삭제할까요? 그룹 편성과 모든 경기 결과도 초기화됩니다.`)) return;
   state.teams.splice(index,1); resetCompetition(); markDirty(); render();
 }
 function clearAll() {
+  if (!requireAdmin()) return;
   if (!window.confirm('참가 팀과 모든 대회 기록을 삭제할까요? 이 작업은 되돌릴 수 없습니다.')) return;
   state.teams=[]; resetCompetition(); markDirty(); render();
 }
@@ -369,11 +372,12 @@ function groupOptions() {
 function drawView() {
   const options = groupOptions();
   return `<div class="panel"><div class="panel-head"><div><h2>그룹 추첨 설정</h2><div class="desc">참가 팀을 무작위로 나누고 조별리그 대진을 자동 편성합니다.</div></div></div>
-    ${options ? `<div class="rowform"><label for="groupCount" style="font-size:12px;font-weight:800">그룹 수</label><select id="groupCount">${options}</select><button class="btn btn-primary" id="runDraw">무작위 그룹 추첨</button></div>` : '<div class="empty">그룹당 최소 2팀이 필요합니다. 참가 팀을 4팀 이상 등록해주세요.</div>'}
+    ${adminUnlocked ? (options ? `<div class="rowform"><label for="groupCount" style="font-size:12px;font-weight:800">그룹 수</label><select id="groupCount">${options}</select><button class="btn btn-primary" id="runDraw">무작위 그룹 추첨</button></div>` : '<div class="empty">그룹당 최소 2팀이 필요합니다. 참가 팀을 4팀 이상 등록해주세요.</div>') : '<div class="admin-lock">그룹 추첨 및 재추첨은 관리자 전용입니다. 현재 편성된 그룹은 조회할 수 있습니다.</div>'}
     <div class="notice" style="margin-top:14px">통합 리그순위의 경기 수를 동일하게 맞추기 위해 참가 팀 수가 그룹 수로 나누어떨어지는 2·4·8개 그룹만 선택할 수 있습니다. 전체 조 통합 리그순위 상위 팀이 토너먼트에 진출합니다. 재추첨 시 기존 결과는 초기화됩니다.</div>
     ${state.groups.length ? groupCards() : '<div class="empty">아직 그룹 추첨이 진행되지 않았습니다.</div>'}</div>`;
 }
 function runDraw() {
+  if (!requireAdmin()) return;
   const count = Number($('#groupCount')?.value);
   if (!count || count > Math.floor(state.teams.length/2)) { toast('선택한 그룹 수를 확인해주세요.'); return; }
   if (state.groups.length && !window.confirm('다시 추첨하면 기존 조별 경기 결과와 토너먼트가 초기화됩니다. 진행할까요?')) return;
