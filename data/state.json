@@ -117,7 +117,7 @@
       "home": "전북 현대",
       "away": "광주 FC",
       "homeScore": 2,
-      "awayScore": null
+      "awayScore": 1
     },
     {
       "id": "gm_mww36cns_ujklqe",
@@ -148,5 +148,5 @@
   ],
   "tournamentId": null,
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:16:39.343Z"
+  "updatedAt": "2026-11-25T12:16:41.732Z"
 }
