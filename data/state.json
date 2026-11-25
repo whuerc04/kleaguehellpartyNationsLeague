@@ -125,7 +125,7 @@
       "home": "서울 FC",
       "away": "포항 스틸러스",
       "homeScore": 4,
-      "awayScore": null
+      "awayScore": 5
     }
   ],
   "bracket": [],
@@ -157,5 +157,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-25T14:14:18.770Z"
+  "updatedAt": "2026-11-25T14:14:20.911Z"
 }
