@@ -138,7 +138,7 @@
           "away": "전북 현대",
           "homeScore": 3,
           "awayScore": 1,
-          "winner": null
+          "winner": "광주 FC"
         },
         {
           "id": "ko_mww395go_7dyv1r",
@@ -147,6 +147,19 @@
           "homeScore": 1,
           "awayScore": 2,
           "winner": "수원 블루윙즈"
+        }
+      ]
+    },
+    {
+      "name": "결승",
+      "matches": [
+        {
+          "id": "ko_mww39hkx_qu2j9w",
+          "home": "광주 FC",
+          "away": "수원 블루윙즈",
+          "homeScore": null,
+          "awayScore": null,
+          "winner": null
         }
       ]
     }
@@ -170,5 +183,5 @@
   ],
   "tournamentId": "tournament_mww395go_tkrs9h",
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:17:23.727Z"
+  "updatedAt": "2026-11-25T12:17:25.355Z"
 }
