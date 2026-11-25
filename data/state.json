@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "teams": [],
+  "groups": [],
+  "matches": [],
+  "bracket": [],
+  "groupCount": 2,
+  "champions": [
+    {
+      "id": "champ_mwvs8zj2_nlmggu",
+      "tournamentId": null,
+      "season": "2023-2024",
+      "team": "북하딱(FC서울)",
+      "source": "manual"
+    },
+    {
+      "id": "champ_mwvsal1v_cc8xsp",
+      "tournamentId": null,
+      "season": "2025-2026",
+      "team": "볼(포항스틸러스)",
+      "source": "manual"
+    }
+  ],
+  "tournamentId": null,
+  "ignoredChampionTournamentIds": [],
+  "updatedAt": "2026-11-25T07:43:58.303Z"
+}
