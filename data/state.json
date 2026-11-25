@@ -76,7 +76,7 @@
       "group": "A조",
       "home": "울산 HD",
       "away": "수원 블루윙즈",
-      "homeScore": null,
+      "homeScore": 1,
       "awayScore": null
     },
     {
@@ -148,5 +148,5 @@
   ],
   "tournamentId": null,
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:16:25.097Z"
+  "updatedAt": "2026-11-25T12:16:27.025Z"
 }
