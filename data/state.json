@@ -68,8 +68,8 @@
       "group": "A조",
       "home": "서울 FC",
       "away": "수원 블루윙즈",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 1,
+      "awayScore": 1
     },
     {
       "id": "gm_mww36cns_c6u9r5",
@@ -148,5 +148,5 @@
   ],
   "tournamentId": null,
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:16:22.875Z"
+  "updatedAt": "2026-11-25T12:16:25.097Z"
 }
