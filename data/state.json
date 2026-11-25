@@ -137,7 +137,7 @@
           "home": "광주 FC",
           "away": "전북 현대",
           "homeScore": 3,
-          "awayScore": null,
+          "awayScore": 1,
           "winner": null
         },
         {
@@ -170,5 +170,5 @@
   ],
   "tournamentId": "tournament_mww395go_tkrs9h",
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:17:17.672Z"
+  "updatedAt": "2026-11-25T12:17:19.157Z"
 }
