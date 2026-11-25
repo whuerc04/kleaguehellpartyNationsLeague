@@ -50,6 +50,29 @@ input,select{transition:border-color .18s ease,box-shadow .18s ease}input:focus,
 
 
 @media(max-width:700px){body{background-size:78vw auto;background-position:right bottom;background-attachment:scroll}}
+
+/* Readability boost: standings, groups, fixtures and knockout bracket */
+.table-wrap table{font-size:14px}
+.table-wrap th,.table-wrap td{padding:12px 11px}
+.table-wrap td.team{font-size:15px;font-weight:900}
+.table-wrap .rank{width:27px;height:27px;font-size:13px}
+.group-title{font-size:16px;padding:13px 15px}
+.group-card table td{padding:11px 13px;font-size:14px}
+.group-card table td.team{font-size:15px;font-weight:900}
+.round-title{font-size:15px;font-weight:900}
+.bracket-team{font-size:15px;font-weight:800;padding:13px 14px;align-items:center}
+.bracket-team b{font-size:17px;min-width:22px;text-align:right}
+.match .home,.match .away{font-size:14px;font-weight:900}
+.match input{font-size:15px;font-weight:800}
+@media(max-width:650px){
+ .table-wrap table{font-size:13px}
+ .table-wrap th,.table-wrap td{padding:10px 9px}
+ .table-wrap td.team,.group-card table td.team{font-size:14px}
+ .group-title{font-size:15px}
+ .bracket-team{font-size:14px;padding:12px 10px}
+ .bracket-team b{font-size:16px}
+ .match .home,.match .away{font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -332,8 +355,22 @@ async function serverSave({silent=false}={}) {
     const snapshot = currentSnapshot();
     const body = {message:'Update KHL Nations League data',content:encodeGitHubContent(JSON.stringify(snapshot,null,2)),branch:GITHUB_BRANCH};
     if (latest.sha) body.sha = latest.sha;
-    const response = await fetch(GITHUB_API, {method:'PUT',headers:{...githubHeaders(adminToken),'Content-Type':'application/json'},body:JSON.stringify(body)});
-    const result = await response.json().catch(() => ({}));
+    let response, result;
+    response = await fetch(GITHUB_API, {method:'PUT',headers:{...githubHeaders(adminToken),'Content-Type':'application/json'},body:JSON.stringify(body)});
+    result = await response.json().catch(() => ({}));
+    // GitHub가 GET 직후 다른 기기의 커밋을 감지하면 SHA 불일치(409/422)를 반환할 수 있다.
+    // 최신 파일의 내용이 이번 저장 내용과 동일한 경우에만 최신 SHA로 한 번 재시도한다.
+    if (!response.ok && (response.status === 409 || response.status === 422) && /does not match|sha|conflict/i.test(result.message || '')) {
+      const refreshed = await fetchGitHubState();
+      if (refreshed.state && JSON.stringify(refreshed.state) === JSON.stringify(snapshot)) {
+        body.sha = refreshed.sha;
+        response = await fetch(GITHUB_API, {method:'PUT',headers:{...githubHeaders(adminToken),'Content-Type':'application/json'},body:JSON.stringify(body)});
+        result = await response.json().catch(() => ({}));
+      } else {
+        serverFileSha = refreshed.sha || null;
+        throw new Error('다른 기기에서 대회 데이터가 변경되어 저장을 중단했습니다. 최신 데이터를 새로고침한 뒤 변경사항을 다시 적용해주세요. 현재 입력 내용은 이 화면에 남아 있습니다.');
+      }
+    }
     if (!response.ok) {
       if (response.status === 403) {
         throw new Error(`GitHub가 저장을 거부했습니다 (HTTP 403: ${result.message || 'Resource not accessible by personal access token'}). 토큰 설정에서 Repository access를 '${GITHUB_REPO}'로 지정하고 Repository permissions의 Contents를 Read and write로 바꾼 뒤 새 토큰을 발급해야 합니다. 기존 토큰의 권한은 발급 후 수정할 수 없으므로 새 토큰이 필요합니다.`);
