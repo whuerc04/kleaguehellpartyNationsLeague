@@ -157,8 +157,8 @@
           "id": "ko_mww39hkx_qu2j9w",
           "home": "광주 FC",
           "away": "수원 블루윙즈",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 1,
+          "awayScore": 2,
           "winner": null
         }
       ]
@@ -183,5 +183,5 @@
   ],
   "tournamentId": "tournament_mww395go_tkrs9h",
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:17:25.355Z"
+  "updatedAt": "2026-11-25T12:17:29.935Z"
 }
