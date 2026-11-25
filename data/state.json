@@ -125,7 +125,7 @@
       "home": "서울 FC",
       "away": "울산 HD",
       "homeScore": 9,
-      "awayScore": null
+      "awayScore": 10
     }
   ],
   "bracket": [],
@@ -150,5 +150,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:57:04.492Z"
+  "updatedAt": "2026-11-25T13:57:07.959Z"
 }
