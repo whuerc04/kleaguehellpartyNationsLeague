@@ -45,7 +45,7 @@
       "home": "대전 하나",
       "away": "포항 스틸러스",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 0
     },
     {
       "id": "gm_mww6s9as_osvom8",
@@ -150,5 +150,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:56:07.294Z"
+  "updatedAt": "2026-11-25T13:56:09.329Z"
 }
