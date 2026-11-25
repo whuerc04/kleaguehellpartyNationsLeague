@@ -109,14 +109,14 @@
       "home": "전북 현대",
       "away": "부산 아이파크",
       "homeScore": 1,
-      "awayScore": null
+      "awayScore": 1
     },
     {
       "id": "gm_mww36cns_j4zpm6",
       "group": "B조",
       "home": "전북 현대",
       "away": "광주 FC",
-      "homeScore": null,
+      "homeScore": 2,
       "awayScore": null
     },
     {
@@ -148,5 +148,5 @@
   ],
   "tournamentId": null,
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:16:37.182Z"
+  "updatedAt": "2026-11-25T12:16:39.343Z"
 }
