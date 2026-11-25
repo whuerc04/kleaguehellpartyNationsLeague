@@ -108,7 +108,7 @@
       "group": "B조",
       "home": "광주 FC",
       "away": "서울 FC",
-      "homeScore": null,
+      "homeScore": 5,
       "awayScore": null
     },
     {
@@ -150,5 +150,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:56:54.708Z"
+  "updatedAt": "2026-11-25T13:56:56.444Z"
 }
