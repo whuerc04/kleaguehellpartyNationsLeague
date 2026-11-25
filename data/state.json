@@ -144,7 +144,7 @@
           "id": "ko_mww6tyqb_8900f1",
           "home": "수원 블루윙즈",
           "away": "전북 현대",
-          "homeScore": null,
+          "homeScore": 3,
           "awayScore": null,
           "winner": null
         }
@@ -172,5 +172,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:57:30.870Z"
+  "updatedAt": "2026-11-25T13:57:32.929Z"
 }
