@@ -157,7 +157,7 @@
           "id": "ko_mww6ukdc_20vl65",
           "home": "서울 FC",
           "away": "수원 블루윙즈",
-          "homeScore": null,
+          "homeScore": 2,
           "awayScore": null,
           "winner": null
         }
@@ -185,5 +185,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:57:47.642Z"
+  "updatedAt": "2026-11-25T13:57:55.050Z"
 }
