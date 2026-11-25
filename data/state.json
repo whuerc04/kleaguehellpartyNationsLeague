@@ -1,6 +1,15 @@
 {
   "version": 2,
-  "teams": [],
+  "teams": [
+    "서울 FC",
+    "부산 아이파크",
+    "수원 블루윙즈",
+    "울산 HD",
+    "전북 현대",
+    "대전 하나",
+    "포항 스틸러스",
+    "광주 FC"
+  ],
   "groups": [],
   "matches": [],
   "bracket": [],
@@ -25,5 +34,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T12:35:43.478Z"
+  "updatedAt": "2026-11-25T12:35:49.339Z"
 }
