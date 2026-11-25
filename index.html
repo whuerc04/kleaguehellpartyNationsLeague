@@ -211,12 +211,12 @@ function toggleAdmin() {
   root.innerHTML = `<div class="modal-backdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="adminLoginTitle">
     <h2 id="adminLoginTitle">관리자 로그인</h2>
     <p>관리자 계정으로 로그인하면 대회 정보와 경기 결과를 수정할 수 있습니다.</p>
-    <form id="adminLoginForm" autocomplete="on">
+    <form id="adminLoginForm" autocomplete="off">
       <label for="adminLoginId">아이디</label>
-      <input id="adminLoginId" name="username" type="text" autocomplete="username" placeholder="관리자 아이디" required>
+      <input id="adminLoginId" name="username" type="text" autocomplete="off" placeholder="아이디 입력" value="" required>
       <label for="adminLoginPassword">비밀번호</label>
-      <input id="adminLoginPassword" name="password" type="password" autocomplete="current-password" placeholder="비밀번호" required>
-      ${savedToken ? `<div class="notice" style="margin-top:12px">GitHub 토큰이 이 브라우저에 저장되어 있습니다. 아이디와 비밀번호만 입력하면 됩니다.</div>` : `<label for="adminGitHubToken">GitHub 토큰 (최초 1회)</label><input id="adminGitHubToken" name="githubToken" type="password" autocomplete="off" placeholder="GitHub Fine-grained Personal Access Token" required><p class="desc">해당 저장소의 Contents 읽기 및 쓰기 권한이 필요합니다. 인증 성공 후 이 브라우저에 저장됩니다.</p>`}
+      <input id="adminLoginPassword" name="password" type="password" autocomplete="new-password" placeholder="비밀번호 입력" value="" required>
+      ${savedToken ? `<div class="notice" style="margin-top:12px">GitHub 토큰이 이 브라우저에 저장되어 있습니다. 아이디와 비밀번호만 입력하면 됩니다.</div>` : `<label for="adminGitHubToken">GitHub 토큰 (최초 1회)</label><input id="adminGitHubToken" name="githubToken" type="password" autocomplete="new-password" placeholder="GitHub 토큰 입력" value="" required><p class="desc">해당 저장소의 Contents 읽기 및 쓰기 권한이 필요합니다. 인증 성공 후 이 브라우저에 저장됩니다.</p>`}
       <div id="adminLoginError" class="warning" style="display:none;margin-top:12px"></div>
       <div class="modal-actions"><button type="button" class="btn btn-muted" id="cancelAdminLogin">취소</button><button type="submit" class="btn btn-primary" id="submitAdminLogin">로그인</button></div>
     </form>
