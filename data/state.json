@@ -138,7 +138,7 @@
           "away": "서울 FC",
           "homeScore": 1,
           "awayScore": 1,
-          "winner": null
+          "winner": "서울 FC"
         },
         {
           "id": "ko_mww6tyqb_8900f1",
@@ -147,6 +147,19 @@
           "homeScore": 3,
           "awayScore": 2,
           "winner": "수원 블루윙즈"
+        }
+      ]
+    },
+    {
+      "name": "결승",
+      "matches": [
+        {
+          "id": "ko_mww6ukdc_20vl65",
+          "home": "서울 FC",
+          "away": "수원 블루윙즈",
+          "homeScore": null,
+          "awayScore": null,
+          "winner": null
         }
       ]
     }
@@ -172,5 +185,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:57:35.298Z"
+  "updatedAt": "2026-11-25T13:57:47.642Z"
 }
