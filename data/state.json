@@ -137,7 +137,7 @@
           "id": "po_mww7g6o8_vf55m3",
           "home": "울산 HD",
           "away": "포항 스틸러스",
-          "homeScore": 8,
+          "homeScore": 2,
           "awayScore": 2,
           "winner": null
         },
@@ -145,7 +145,7 @@
           "id": "po_mww7g6o8_vqih2v",
           "home": "서울 FC",
           "away": "수원 블루윙즈",
-          "homeScore": null,
+          "homeScore": 2,
           "awayScore": null,
           "winner": null
         }
@@ -179,5 +179,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-25T14:14:56.021Z"
+  "updatedAt": "2026-11-25T14:14:59.297Z"
 }
