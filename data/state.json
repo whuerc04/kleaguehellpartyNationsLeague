@@ -109,7 +109,7 @@
       "home": "광주 FC",
       "away": "서울 FC",
       "homeScore": 5,
-      "awayScore": null
+      "awayScore": 8
     },
     {
       "id": "gm_mww6s9as_6tq9i8",
@@ -150,5 +150,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:56:56.444Z"
+  "updatedAt": "2026-11-25T13:56:58.298Z"
 }
