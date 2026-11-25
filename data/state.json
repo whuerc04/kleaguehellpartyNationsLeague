@@ -101,7 +101,7 @@
       "home": "부산 아이파크",
       "away": "울산 HD",
       "homeScore": 6,
-      "awayScore": null
+      "awayScore": 8
     },
     {
       "id": "gm_mww6s9as_g3eowi",
@@ -150,5 +150,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:56:52.718Z"
+  "updatedAt": "2026-11-25T13:56:54.708Z"
 }
