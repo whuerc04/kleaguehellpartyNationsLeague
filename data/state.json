@@ -84,7 +84,7 @@
       "group": "B조",
       "home": "대전 하나",
       "away": "전북 현대",
-      "homeScore": null,
+      "homeScore": 2,
       "awayScore": null
     },
     {
@@ -148,5 +148,5 @@
   ],
   "tournamentId": null,
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:16:28.897Z"
+  "updatedAt": "2026-11-25T12:16:30.698Z"
 }
