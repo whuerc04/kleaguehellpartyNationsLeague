@@ -76,8 +76,8 @@
       "group": "A조",
       "home": "포항 스틸러스",
       "away": "전북 현대",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 2,
+      "awayScore": 5
     },
     {
       "id": "gm_mww6s9as_xc5o2v",
@@ -150,5 +150,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:56:39.615Z"
+  "updatedAt": "2026-11-25T13:56:43.149Z"
 }
