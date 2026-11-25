@@ -146,15 +146,38 @@
       "source": "manual"
     }
   ],
-  "tournamentId": "tournament_mww7g6o8_tpqrzr",
+  "tournamentId": "tournament_mwwa0que_sxrv3i",
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
   "thirdPlaceMatch": null,
   "pointAdjustments": {},
-  "playoffMatches": [],
-  "playoffDirect": [],
-  "eliminatedTeams": [],
-  "updatedAt": "2026-11-25T15:26:18.145Z"
+  "playoffMatches": [
+    {
+      "id": "po_mwwa0que_moj4jx",
+      "home": "울산 HD",
+      "away": "포항 스틸러스",
+      "homeScore": null,
+      "awayScore": null,
+      "winner": null
+    },
+    {
+      "id": "po_mwwa0que_j79lki",
+      "home": "서울 FC",
+      "away": "수원 블루윙즈",
+      "homeScore": null,
+      "awayScore": null,
+      "winner": null
+    }
+  ],
+  "playoffDirect": [
+    "대전 하나",
+    "부산 아이파크"
+  ],
+  "eliminatedTeams": [
+    "전북 현대",
+    "광주 FC"
+  ],
+  "updatedAt": "2026-11-25T15:26:36.634Z"
 }
