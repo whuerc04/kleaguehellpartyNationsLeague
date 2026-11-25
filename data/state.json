@@ -137,7 +137,7 @@
           "home": "울산 HD",
           "away": "서울 FC",
           "homeScore": 1,
-          "awayScore": null,
+          "awayScore": 1,
           "winner": null
         },
         {
@@ -172,5 +172,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:57:29.017Z"
+  "updatedAt": "2026-11-25T13:57:30.870Z"
 }
