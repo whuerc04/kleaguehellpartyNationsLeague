@@ -53,14 +53,14 @@
       "home": "포항 스틸러스",
       "away": "수원 블루윙즈",
       "homeScore": 2,
-      "awayScore": null
+      "awayScore": 3
     },
     {
       "id": "gm_mww36cns_4suhzu",
       "group": "A조",
       "home": "서울 FC",
       "away": "울산 HD",
-      "homeScore": null,
+      "homeScore": 1,
       "awayScore": null
     },
     {
@@ -148,5 +148,5 @@
   ],
   "tournamentId": null,
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:16:17.714Z"
+  "updatedAt": "2026-11-25T12:16:20.527Z"
 }
