@@ -69,14 +69,14 @@
       "home": "울산 HD",
       "away": "광주 FC",
       "homeScore": 4,
-      "awayScore": null
+      "awayScore": 3
     },
     {
       "id": "gm_mww7f8i3_uldyqk",
       "group": "A조",
       "home": "부산 아이파크",
       "away": "광주 FC",
-      "homeScore": null,
+      "homeScore": 5,
       "awayScore": null
     },
     {
@@ -157,5 +157,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-25T14:14:03.347Z"
+  "updatedAt": "2026-11-25T14:14:05.331Z"
 }
