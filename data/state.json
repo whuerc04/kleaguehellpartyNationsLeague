@@ -124,7 +124,7 @@
       "group": "B조",
       "home": "서울 FC",
       "away": "울산 HD",
-      "homeScore": null,
+      "homeScore": 9,
       "awayScore": null
     }
   ],
@@ -150,5 +150,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:57:02.763Z"
+  "updatedAt": "2026-11-25T13:57:04.492Z"
 }
