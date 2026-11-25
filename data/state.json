@@ -158,14 +158,21 @@
           "home": "광주 FC",
           "away": "수원 블루윙즈",
           "homeScore": 1,
-          "awayScore": 2,
-          "winner": null
+          "awayScore": 3,
+          "winner": "수원 블루윙즈"
         }
       ]
     }
   ],
   "groupCount": 2,
   "champions": [
+    {
+      "id": "champ_mww39mmf_55njdn",
+      "tournamentId": "tournament_mww395go_tkrs9h",
+      "season": "2026",
+      "team": "수원 블루윙즈",
+      "source": "auto"
+    },
     {
       "id": "champ_mwvs8zj2_nlmggu",
       "tournamentId": null,
@@ -183,5 +190,5 @@
   ],
   "tournamentId": "tournament_mww395go_tkrs9h",
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:17:29.935Z"
+  "updatedAt": "2026-11-25T12:17:31.909Z"
 }
