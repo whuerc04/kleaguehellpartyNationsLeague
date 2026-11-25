@@ -36,8 +36,8 @@
       "group": "A조",
       "home": "포항 스틸러스",
       "away": "서울 FC",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 1,
+      "awayScore": 1
     },
     {
       "id": "gm_mww36cns_cha2ck",
@@ -148,5 +148,5 @@
   ],
   "tournamentId": null,
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:14:59.045Z"
+  "updatedAt": "2026-11-25T12:16:10.931Z"
 }
