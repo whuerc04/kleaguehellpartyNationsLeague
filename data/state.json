@@ -77,31 +77,31 @@
       "home": "부산 아이파크",
       "away": "광주 FC",
       "homeScore": 5,
-      "awayScore": null
+      "awayScore": 0
     },
     {
       "id": "gm_mww7f8i3_x7v974",
       "group": "B조",
       "home": "대전 하나",
       "away": "전북 현대",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 4,
+      "awayScore": 2
     },
     {
       "id": "gm_mww7f8i3_6tue3u",
       "group": "B조",
       "home": "대전 하나",
       "away": "서울 FC",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 2,
+      "awayScore": 2
     },
     {
       "id": "gm_mww7f8i3_krzz0g",
       "group": "B조",
       "home": "대전 하나",
       "away": "포항 스틸러스",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 4,
+      "awayScore": 2
     },
     {
       "id": "gm_mww7f8i3_muyekz",
@@ -157,5 +157,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-25T14:14:05.331Z"
+  "updatedAt": "2026-11-25T14:14:10.750Z"
 }
