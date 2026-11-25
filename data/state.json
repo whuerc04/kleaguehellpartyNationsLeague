@@ -108,23 +108,23 @@
       "group": "B조",
       "home": "전북 현대",
       "away": "서울 FC",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 2,
+      "awayScore": 3
     },
     {
       "id": "gm_mww7f8i3_d8916y",
       "group": "B조",
       "home": "전북 현대",
       "away": "포항 스틸러스",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 4,
+      "awayScore": 3
     },
     {
       "id": "gm_mww7f8i3_gkqidf",
       "group": "B조",
       "home": "서울 FC",
       "away": "포항 스틸러스",
-      "homeScore": null,
+      "homeScore": 44,
       "awayScore": null
     }
   ],
@@ -157,5 +157,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-25T14:14:10.750Z"
+  "updatedAt": "2026-11-25T14:14:16.400Z"
 }
