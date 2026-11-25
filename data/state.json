@@ -93,7 +93,7 @@
       "home": "부산 아이파크",
       "away": "서울 FC",
       "homeScore": 3,
-      "awayScore": null
+      "awayScore": 2
     },
     {
       "id": "gm_mww6s9as_y8o89k",
@@ -150,5 +150,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:56:47.800Z"
+  "updatedAt": "2026-11-25T13:56:50.685Z"
 }
