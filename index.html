@@ -116,9 +116,9 @@ const STORAGE_KEY = 'khl_nations_league_v2';
 const LEGACY_KEY = 'khl_nations_league_v1';
 const SUBS = {
   draw: [['participants', '참가인원'], ['draw', '그룹추첨']],
-  progress: [['league', '그룹리그'], ['standings', '리그순위'], ['bracket', '토너먼트'], ['scorers', '득점왕'], ['history', '역대 우승자']]
+  progress: [['league', '그룹리그'], ['standings', '리그순위'], ['bracket', '토너먼트'], ['scorers', '팀 득점 통계'], ['history', '역대 우승자']]
 };
-let state = { version: 2, teams: [], groups: [], matches: [], bracket: [], groupCount: 2, champions: [], tournamentId: null, ignoredChampionTournamentIds: [], thirdPlaceMatch: null, pointAdjustments: {}, playoffMatches: [], playoffDirect: [], eliminatedTeams: [], scorers: [], goalEvents: [] };
+let state = { version: 2, teams: [], groups: [], matches: [], bracket: [], groupCount: 2, champions: [], tournamentId: null, ignoredChampionTournamentIds: [], thirdPlaceMatch: null, pointAdjustments: {}, playoffMatches: [], playoffDirect: [], eliminatedTeams: [] };
 let mainTab = 'draw', subTab = 'participants';
 let adminUnlocked = false, apiBase = '', adminToken = '';
 let serverUpdatedAt = null, serverFileSha = null, autoSaveTimer = null, isApplyingServerState = false, initialServerLoadDone = false;
@@ -163,8 +163,6 @@ function loadState(data) {
     playoffMatches: Array.isArray(data.playoffMatches) ? data.playoffMatches.map(m=>({...m,id:m.id||uid('po')})) : [],
     playoffDirect: Array.isArray(data.playoffDirect) ? data.playoffDirect : [],
     eliminatedTeams: Array.isArray(data.eliminatedTeams) ? data.eliminatedTeams : [],
-    scorers: Array.isArray(data.scorers) ? data.scorers.map(item => ({id:item.id || uid('scorer'), player:String(item.player || ''), team:String(item.team || ''), goals:Math.max(0, Number(item.goals) || 0)})).filter(item => item.player && item.team) : [],
-    goalEvents: Array.isArray(data.goalEvents) ? data.goalEvents.map(item => ({id:item.id || uid('goal'), phase:String(item.phase || '그룹리그'), matchId:String(item.matchId || ''), matchLabel:String(item.matchLabel || ''), team:String(item.team || ''), player:String(item.player || ''), goals:Math.max(1, Number(item.goals) || 1)})).filter(item => item.matchId && item.team && item.player) : []
   };
 }
 function normalizeBracketRound(round) {
@@ -483,7 +481,7 @@ function runDraw() {
   for (let i=shuffled.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]; }
   state.groups = Array.from({length:count},(_,i)=>({name:`${String.fromCharCode(65+i)}조`,teams:[]}));
   shuffled.forEach((team,index)=>state.groups[index%count].teams.push(team));
-  state.matches=[]; state.goalEvents=[];
+  state.matches=[];
   state.groups.forEach(group=>{
     for(let i=0;i<group.teams.length;i++) for(let j=i+1;j<group.teams.length;j++) state.matches.push({id:uid('gm'),group:group.name,home:group.teams[i],away:group.teams[j],homeScore:null,awayScore:null});
   });
@@ -497,7 +495,7 @@ function leagueView() {
   return `<div class="panel"><div class="panel-head"><div><h2>그룹리그 경기 결과</h2><div class="desc">점수 입력 후 결과 확정 버튼을 누르면 순위에 반영됩니다.</div></div></div>
     ${!adminUnlocked ? '<div class="admin-lock">관리자 잠금 상태 · 경기 결과 입력 및 수정은 관리자만 가능합니다.</div>' : ''}
     ${state.groups.map(group=>`<div style="margin-bottom:22px"><div class="panel-head"><b>${esc(group.name)}</b><span class="pill">${group.teams.length}팀 · ${state.matches.filter(m=>m.group===group.name).length}경기</span></div><div class="match-list">
-      ${state.matches.filter(m=>m.group===group.name).map(match=>`<div class="match"><div class="home">${esc(match.home)}</div><input type="number" min="0" step="1" aria-label="${esc(match.home)} 득점" value="${match.homeScore ?? ''}" placeholder="-" data-match-score="${match.id}" data-side="home" ${adminUnlocked?'':'disabled'}><div class="vs">VS</div><input type="number" min="0" step="1" aria-label="${esc(match.away)} 득점" value="${match.awayScore ?? ''}" placeholder="-" data-match-score="${match.id}" data-side="away" ${adminUnlocked?'':'disabled'}><div class="away">${esc(match.away)}</div><small>${match.homeScore===null||match.awayScore===null?'경기 결과 미입력':`${match.homeScore} : ${match.awayScore} · 결과 저장됨`}</small>${matchGoalEntry(match,'그룹리그',`${match.group} ${match.home} vs ${match.away}`)}</div>`).join('')}
+      ${state.matches.filter(m=>m.group===group.name).map(match=>`<div class="match"><div class="home">${esc(match.home)}</div><input type="number" min="0" step="1" aria-label="${esc(match.home)} 득점" value="${match.homeScore ?? ''}" placeholder="-" data-match-score="${match.id}" data-side="home" ${adminUnlocked?'':'disabled'}><div class="vs">VS</div><input type="number" min="0" step="1" aria-label="${esc(match.away)} 득점" value="${match.awayScore ?? ''}" placeholder="-" data-match-score="${match.id}" data-side="away" ${adminUnlocked?'':'disabled'}><div class="away">${esc(match.away)}</div><small>${match.homeScore===null||match.awayScore===null?'경기 결과 미입력':`${match.homeScore} : ${match.awayScore} · 결과 저장됨`}</small></div>`).join('')}
     </div></div>`).join('')}</div>`;
 }
 function updateGroupScore(matchId,side,value) {
@@ -537,7 +535,7 @@ function makeBracket() {
   if(!ranked){toast('모든 조별리그 경기 결과를 입력한 뒤 토너먼트를 생성해주세요.');return;}
   if(ranked.length<4){toast('토너먼트는 최소 4팀부터 생성할 수 있습니다.');return;}
   if(!window.confirm('통합 리그순위에 따라 본선·플레이오프 진출팀을 편성할까요? 기존 토너먼트 기록은 초기화됩니다.'))return;
-  state.bracket=[]; state.thirdPlaceMatch=null; state.playoffMatches=[]; state.playoffDirect=[]; state.eliminatedTeams=[]; state.goalEvents=(state.goalEvents||[]).filter(event=>event.phase==='그룹리그');
+  state.bracket=[]; state.thirdPlaceMatch=null; state.playoffMatches=[]; state.playoffDirect=[]; state.eliminatedTeams=[];
   if(ranked.length>=8){
     const directCount=2**Math.floor(Math.log2(Math.max(1,Math.floor(ranked.length/4))));
     const playoffCount=directCount*2;
@@ -646,63 +644,34 @@ function championsView() {
     ${records.length ? `<div class="table-wrap"><table><thead><tr><th>대회</th><th>우승팀</th></tr></thead><tbody>${records.map((item,index)=>`<tr><td><b>${esc(item.season || '연도 미상')}</b></td><td class="team">🏆 ${esc(item.team)}${item.source==='auto'?' <span class="pill">자동 기록</span>':''}</td>${adminUnlocked?`<td><div class="rowform"><button type="button" class="btn btn-muted btn-small" data-edit-champion="${esc(item.id)}">이름 수정</button><button type="button" class="btn btn-muted btn-small" data-move-champion="${esc(item.id)}" data-direction="up" ${index===0?'disabled':''}>↑</button><button type="button" class="btn btn-muted btn-small" data-move-champion="${esc(item.id)}" data-direction="down" ${index===records.length-1?'disabled':''}>↓</button><button type="button" class="btn btn-danger btn-small" data-delete-champion="${esc(item.id)}">삭제</button></div></td>`:''}</tr>`).join('')}</tbody></table></div>` : `<div class="empty">아직 등록된 우승 기록이 없습니다. 대회 결승전 승자가 확정되면 자동으로 기록됩니다.</div>`}
   </div>`;
 }
-function matchGoalEvents(matchId) { return (state.goalEvents || []).filter(event => event.matchId === String(matchId)); }
-function matchGoalEntry(match, phase, label) {
-  const events = matchGoalEvents(match.id);
-  return `<div class="bracket-controls" style="border-top:1px solid var(--line);padding-top:8px;margin-top:8px"><div class="desc" style="margin-bottom:6px">⚽ 득점 기록 · ${events.reduce((n,e)=>n+e.goals,0)}골</div>${adminUnlocked?`<div class="rowform"><select data-goal-team="${esc(match.id)}"><option value="${esc(match.home)}">${esc(match.home)}</option><option value="${esc(match.away)}">${esc(match.away)}</option></select><input data-goal-player="${esc(match.id)}" maxlength="40" placeholder="득점 선수" style="min-width:100px"><input data-goal-count="${esc(match.id)}" type="number" min="1" step="1" value="1" aria-label="득점 수" style="max-width:75px"><button type="button" class="btn btn-secondary btn-small" data-add-goal="${esc(match.id)}" data-goal-phase="${esc(phase)}" data-goal-label="${esc(label)}">득점 추가</button></div>`:''}${events.length?`<div style="margin-top:6px;font-size:11px;color:var(--muted)">${events.map(e=>`<div style="display:flex;justify-content:space-between;gap:8px;padding:3px 0"><span>${esc(e.team)} · ${esc(e.player)} ${e.goals}골</span>${adminUnlocked?`<button type="button" class="btn btn-danger btn-small" data-delete-goal="${esc(e.id)}">삭제</button>`:''}</div>`).join('')}</div>`:''}</div>`;
-}
-function addGoalEvent(matchId, phase, label) {
-  if (!requireAdmin()) return;
-  const teamInput = document.querySelector(`[data-goal-team="${CSS.escape(matchId)}"]`);
-  const playerInput = document.querySelector(`[data-goal-player="${CSS.escape(matchId)}"]`);
-  const countInput = document.querySelector(`[data-goal-count="${CSS.escape(matchId)}"]`);
-  const team = teamInput?.value || '', player = (playerInput?.value || '').trim(), goals = Number(countInput?.value);
-  if (!team || !player || !Number.isInteger(goals) || goals < 1) { toast('득점 팀, 선수 이름, 1골 이상의 정수를 입력해주세요.'); return; }
-  state.goalEvents.push({id:uid('goal'),phase,matchId:String(matchId),matchLabel:label,team,player,goals});
-  markDirty(); render();
-}
-function deleteGoalEvent(id) {
-  if (!requireAdmin()) return;
-  state.goalEvents = state.goalEvents.filter(event => event.id !== id); markDirty(); render();
+function allScoredFixtures() {
+  const fixtures = [];
+  (state.matches || []).forEach(m => fixtures.push({...m, phase:'그룹리그'}));
+  (state.playoffMatches || []).forEach(m => fixtures.push({...m, phase:'플레이오프'}));
+  (state.bracket || []).forEach(round => (round.matches || []).forEach(m => fixtures.push({...m, phase:round.name || '토너먼트'})));
+  if (state.thirdPlaceMatch) fixtures.push({...state.thirdPlaceMatch, phase:'3·4위 결정전'});
+  return fixtures.filter(m => m.home && m.away && m.homeScore !== null && m.homeScore !== undefined && m.awayScore !== null && m.awayScore !== undefined && Number.isFinite(Number(m.homeScore)) && Number.isFinite(Number(m.awayScore)));
 }
 function scorerTotals() {
   const totals = new Map();
-  (state.scorers || []).forEach(item => { const key = `${item.team}\\u0000${item.player}`; totals.set(key,{player:item.player,team:item.team,goals:item.goals}); });
-  (state.goalEvents || []).forEach(event => { const key = `${event.team}\\u0000${event.player}`; const row=totals.get(key)||{player:event.player,team:event.team,goals:0,details:[]}; row.goals+=event.goals; row.details ||= []; row.details.push(`${event.matchLabel || event.phase}: ${event.goals}골`); totals.set(key,row); });
-  return [...totals.values()].sort((a,b)=>b.goals-a.goals||a.player.localeCompare(b.player,'ko'));
+  const addTeam = team => { if (!totals.has(team)) totals.set(team,{team,played:0,goals:0,conceded:0}); return totals.get(team); };
+  (state.teams || []).forEach(addTeam);
+  allScoredFixtures().forEach(m => {
+    const home=addTeam(m.home), away=addTeam(m.away);
+    const hs=Number(m.homeScore), as=Number(m.awayScore);
+    home.played++; home.goals+=hs; home.conceded+=as;
+    away.played++; away.goals+=as; away.conceded+=hs;
+  });
+  return [...totals.values()].map(row=>({...row,diff:row.goals-row.conceded})).sort((a,b)=>b.goals-a.goals||b.diff-a.diff||a.team.localeCompare(b.team,'ko'));
 }
 function scorersView() {
   const records = scorerTotals();
+  const fixtures = allScoredFixtures();
   const topGoals = records.length ? records[0].goals : 0;
-  return `<div class="panel"><div class="panel-head"><div><h2>득점왕 순위</h2><div class="desc">그룹리그·플레이오프·토너먼트 경기별 득점 기록이 자동 합산됩니다. 공동 득점왕은 동률로 표시됩니다.</div></div><span class="pill">${records.length}명 등록</span></div>
-    ${adminUnlocked ? `<div class="notice" style="margin-bottom:14px">각 그룹리그·플레이오프·토너먼트 경기 카드에서 득점 선수와 득점 수를 입력하세요. 기록은 자동 저장됩니다.</div>` : `<div class="notice">경기별로 등록된 득점 기록을 합산한 순위입니다.</div>`}
-    ${records.length ? `<div class="table-wrap"><table><thead><tr><th>순위</th><th>선수</th><th>팀</th><th>득점</th></tr></thead><tbody>${records.map((item,index)=>{const rank=index>0&&item.goals===records[index-1].goals?'공동':index+1;return `<tr><td><b>${rank}</b></td><td class="team">${item.goals===topGoals?'⚽ ':''}${esc(item.player)}${item.goals===topGoals?' <span class="pill">득점 선두</span>':''}</td><td>${esc(item.team)}</td><td><b>${item.goals}골</b>${item.details?.length?`<div class="desc">${item.details.map(esc).join('<br>')}</div>`:''}</td></tr>`}).join('')}</tbody></table></div>` : `<div class="empty">아직 경기별 득점 기록이 없습니다. 각 경기 카드에서 득점 선수를 추가해주세요.</div>`}
+  return `<div class="panel"><div class="panel-head"><div><h2>팀 득점 통계</h2><div class="desc">그룹리그·플레이오프·토너먼트·3·4위 결정전의 경기 점수를 자동 합산합니다. 선수별 득점 입력은 없습니다.</div></div><span class="pill">${fixtures.length}경기 반영</span></div>
+    <div class="notice" style="margin-bottom:14px">경기 점수를 입력하거나 수정하면 이 통계도 자동으로 갱신됩니다. 득점이 같으면 득실차, 팀 이름 순으로 표시합니다.</div>
+    ${records.length && fixtures.length ? `<div class="table-wrap"><table><thead><tr><th>순위</th><th>팀</th><th>경기</th><th>득점</th><th>실점</th><th>득실차</th></tr></thead><tbody>${records.map((item,index)=>{const rank=index>0&&item.goals===records[index-1].goals?'공동':index+1;return `<tr><td><b>${rank}</b></td><td class="team">${item.goals===topGoals?'⚽ ':''}${esc(item.team)}${item.goals===topGoals?' <span class="pill">득점 선두</span>':''}</td><td>${item.played}</td><td><b>${item.goals}</b></td><td>${item.conceded}</td><td>${item.diff>0?'+':''}${item.diff}</td></tr>`}).join('')}</tbody></table></div>` : `<div class="empty">아직 집계할 경기 결과가 없습니다. 그룹리그 또는 토너먼트 경기 점수를 입력하면 팀별 득점 순위가 표시됩니다.</div>`}
   </div>`;
-}
-function addScorer(event) {
-  event.preventDefault(); if (!requireAdmin()) return;
-  const data = new FormData(event.target);
-  const player = String(data.get('player') || '').trim(), team = String(data.get('team') || '').trim(), goals = Number(data.get('goals'));
-  if (!player || !team || !Number.isInteger(goals) || goals < 0) { toast('선수, 소속 팀, 0 이상의 정수 득점을 입력해주세요.'); return; }
-  const existing = state.scorers.find(item => item.player.toLocaleLowerCase() === player.toLocaleLowerCase() && item.team.toLocaleLowerCase() === team.toLocaleLowerCase());
-  if (existing) { existing.goals = goals; toast('동일 선수의 득점 기록을 갱신했습니다.'); }
-  else state.scorers.push({id:uid('scorer'), player, team, goals});
-  markDirty(); render();
-}
-function editScorer(id) {
-  if (!requireAdmin()) return;
-  const item = state.scorers.find(record => record.id === id); if (!item) return;
-  const player = window.prompt('선수 이름을 수정하세요.', item.player); if (player === null) return;
-  const team = window.prompt('소속 팀을 수정하세요.', item.team); if (team === null) return;
-  const goalsText = window.prompt('득점을 입력하세요.', String(item.goals)); if (goalsText === null) return;
-  const goals = Number(goalsText);
-  if (!player.trim() || !team.trim() || !Number.isInteger(goals) || goals < 0) { toast('선수와 팀 이름, 0 이상의 정수 득점을 입력해주세요.'); return; }
-  item.player = player.trim(); item.team = team.trim(); item.goals = goals; markDirty(); render();
-}
-function deleteScorer(id) {
-  if (!requireAdmin()) return;
-  const item = state.scorers.find(record => record.id === id); if (!item || !window.confirm(`${item.player} 선수의 득점 기록을 삭제할까요?`)) return;
-  state.scorers = state.scorers.filter(record => record.id !== id); markDirty(); render();
 }
 
 function addChampion(event) {
@@ -794,17 +763,17 @@ function bracketView() {
     <div class="bracket-team ${match.winner===match.home?'winner':''}"><span>${esc(match.home)}</span><b>${match.homeScore??'–'}</b></div>
     <div class="bracket-team ${match.winner===match.away?'winner':''}"><span>${esc(match.away)}</span><b>${match.awayScore??'–'}</b></div>
     ${adminUnlocked?`<div class="bracket-controls"><div class="rowform"><input type="number" min="0" step="1" aria-label="${esc(match.home)} 점수" placeholder="홈" value="${match.homeScore??''}" data-ko-score="${match.id}" data-round="${ri}" data-side="home"><input type="number" min="0" step="1" aria-label="${esc(match.away)} 점수" placeholder="원정" value="${match.awayScore??''}" data-ko-score="${match.id}" data-round="${ri}" data-side="away"><button class="btn btn-primary btn-small" data-confirm-winner="${match.id}" data-round="${ri}">승자 확정</button></div></div>`:''}
-    ${match.winner?'<div class="bracket-controls" style="color:#16804a;font-size:10px;font-weight:800">승자 확정 · 다음 라운드 반영</div>':''}${matchGoalEntry(match,round.name,`${round.name} ${match.home} vs ${match.away}`)}
+    ${match.winner?'<div class="bracket-controls" style="color:#16804a;font-size:10px;font-weight:800">승자 확정 · 다음 라운드 반영</div>':''}
   </div>`).join('')}</div>`).join('');
   const champion=placements[0]?.team;
   return `<div class="panel"><div class="panel-head"><div><h2>토너먼트 대진표</h2><div class="desc">통합 리그순위 상위 팀 진출 · 모든 경기 승자 확정 시 다음 라운드 자동 생성</div></div>${adminUnlocked?'<button class="btn btn-primary" id="generateBracket">대진표 생성 / 재생성</button>':''}</div>
     <div class="notice">진출 조건: 통합 리그순위 기준으로 본선 직행팀·플레이오프 진출팀·탈락팀을 자동 구분합니다. 8팀 참가 시 상위 2팀 본선 직행, 다음 4팀 플레이오프, 하위 2팀 탈락 방식입니다. 플레이오프 승자는 본선에 합류하며, 준결승 패자는 3·4위 결정전을 진행합니다.</div>
     ${!complete?'<div class="warning">조별리그 결과가 모두 입력되지 않았습니다. 모든 조의 경기를 완료해야 토너먼트 대진표를 만들 수 있습니다.</div>':''}
-    ${state.playoffMatches.length?`<div class="panel" style="margin-top:14px"><h3>플레이오프</h3><p class="desc">통합 순위 상위팀은 본선 직행, 다음 순위 팀은 플레이오프를 진행합니다. 플레이오프 승자는 본선에 합류합니다.</p><p>본선 직행: ${state.playoffDirect.map(esc).join(', ')||'-'}</p>${state.playoffMatches.map(m=>`<div class="bracket-match"><div class="bracket-team ${m.winner===m.home?'winner':''}"><span>${esc(m.home)}</span><b>${m.homeScore??'–'}</b></div><div class="bracket-team ${m.winner===m.away?'winner':''}"><span>${esc(m.away)}</span><b>${m.awayScore??'–'}</b></div>${adminUnlocked?`<div class="bracket-controls"><div class="rowform"><input type="number" min="0" value="${m.homeScore??''}" data-po-score="${m.id}" data-side="home" placeholder="홈"><input type="number" min="0" value="${m.awayScore??''}" data-po-score="${m.id}" data-side="away" placeholder="원정"><button class="btn btn-primary btn-small" data-confirm-po="${m.id}">승자 확정</button></div></div>`:''}${m.winner?`<div class="bracket-controls">본선 진출: ${esc(m.winner)}</div>`:''}${matchGoalEntry(m,'플레이오프',`플레이오프 ${m.home} vs ${m.away}`)}</div>`).join('')}<p class="desc">탈락: ${state.eliminatedTeams.map(esc).join(', ')||'없음'}</p></div>`:''}
+    ${state.playoffMatches.length?`<div class="panel" style="margin-top:14px"><h3>플레이오프</h3><p class="desc">통합 순위 상위팀은 본선 직행, 다음 순위 팀은 플레이오프를 진행합니다. 플레이오프 승자는 본선에 합류합니다.</p><p>본선 직행: ${state.playoffDirect.map(esc).join(', ')||'-'}</p>${state.playoffMatches.map(m=>`<div class="bracket-match"><div class="bracket-team ${m.winner===m.home?'winner':''}"><span>${esc(m.home)}</span><b>${m.homeScore??'–'}</b></div><div class="bracket-team ${m.winner===m.away?'winner':''}"><span>${esc(m.away)}</span><b>${m.awayScore??'–'}</b></div>${adminUnlocked?`<div class="bracket-controls"><div class="rowform"><input type="number" min="0" value="${m.homeScore??''}" data-po-score="${m.id}" data-side="home" placeholder="홈"><input type="number" min="0" value="${m.awayScore??''}" data-po-score="${m.id}" data-side="away" placeholder="원정"><button class="btn btn-primary btn-small" data-confirm-po="${m.id}">승자 확정</button></div></div>`:''}${m.winner?`<div class="bracket-controls">본선 진출: ${esc(m.winner)}</div>`:''}</div>`).join('')}<p class="desc">탈락: ${state.eliminatedTeams.map(esc).join(', ')||'없음'}</p></div>`:''}
     ${champion?`<div class="champion"><small>🏆 KHL NATIONS LEAGUE CHAMPION</small><strong>${esc(champion)}</strong><small>대회 우승 확정</small></div>`:''}
     ${state.bracket.length?`<div class="rounds">${rounds}</div>`:`<div class="empty">${complete?'조별리그가 완료됐습니다. 관리자 편집 모드에서 대진표를 생성하세요.':'아직 대진표가 없습니다.'}</div>`}
     ${adminUnlocked&&state.bracket.length?`<div class="rowform" style="margin-top:14px"><button class="btn btn-secondary" id="addRound">라운드 추가</button><button class="btn btn-secondary" id="removeRound">마지막 라운드 삭제</button></div>${state.bracket.map((r,i)=>`<div class="rowform"><span style="font-weight:800">${esc(r.name)}</span><button class="btn btn-secondary btn-small" data-edit-round="${i}">이름 수정</button></div>`).join('')}`:''}
-    ${state.thirdPlaceMatch?`<div class="panel" style="margin-top:16px"><h3>🥉 3·4위 결정전</h3><div class="bracket-match"><div class="bracket-team ${state.thirdPlaceMatch.winner===state.thirdPlaceMatch.home?'winner':''}"><span>${esc(state.thirdPlaceMatch.home)}</span><b>${state.thirdPlaceMatch.homeScore??'–'}</b></div><div class="bracket-team ${state.thirdPlaceMatch.winner===state.thirdPlaceMatch.away?'winner':''}"><span>${esc(state.thirdPlaceMatch.away)}</span><b>${state.thirdPlaceMatch.awayScore??'–'}</b></div>${adminUnlocked?`<div class="bracket-controls"><div class="rowform"><input type="number" min="0" value="${state.thirdPlaceMatch.homeScore??''}" data-third-score="home" placeholder="홈"><input type="number" min="0" value="${state.thirdPlaceMatch.awayScore??''}" data-third-score="away" placeholder="원정"><button class="btn btn-primary btn-small" id="confirmThird">승자 확정</button></div></div>`:''}${state.thirdPlaceMatch.winner?`<div class="bracket-controls">3위: ${esc(state.thirdPlaceMatch.winner)}</div>`:''}${matchGoalEntry(state.thirdPlaceMatch,'3·4위 결정전',`3·4위 결정전 ${state.thirdPlaceMatch.home} vs ${state.thirdPlaceMatch.away}`)}</div></div>`:''}
+    ${state.thirdPlaceMatch?`<div class="panel" style="margin-top:16px"><h3>🥉 3·4위 결정전</h3><div class="bracket-match"><div class="bracket-team ${state.thirdPlaceMatch.winner===state.thirdPlaceMatch.home?'winner':''}"><span>${esc(state.thirdPlaceMatch.home)}</span><b>${state.thirdPlaceMatch.homeScore??'–'}</b></div><div class="bracket-team ${state.thirdPlaceMatch.winner===state.thirdPlaceMatch.away?'winner':''}"><span>${esc(state.thirdPlaceMatch.away)}</span><b>${state.thirdPlaceMatch.awayScore??'–'}</b></div>${adminUnlocked?`<div class="bracket-controls"><div class="rowform"><input type="number" min="0" value="${state.thirdPlaceMatch.homeScore??''}" data-third-score="home" placeholder="홈"><input type="number" min="0" value="${state.thirdPlaceMatch.awayScore??''}" data-third-score="away" placeholder="원정"><button class="btn btn-primary btn-small" id="confirmThird">승자 확정</button></div></div>`:''}${state.thirdPlaceMatch.winner?`<div class="bracket-controls">3위: ${esc(state.thirdPlaceMatch.winner)}</div>`:''}</div></div>`:''}
     ${placements.length?`<div style="margin-top:18px"><h3>토너먼트 최종 순위</h3><div class="table-wrap"><table><thead><tr><th>최종 순위</th><th>팀</th></tr></thead><tbody>${placements.map(item=>`<tr><td><b>${esc(item.place)}</b></td><td class="team">${esc(item.team)}</td></tr>`).join('')}</tbody></table></div></div>`:''}
   </div>`;
 }
@@ -822,11 +791,7 @@ function handleClick(event) {
   if(target.id==='adminBtn'){toggleAdmin();return;}
   if(target.id==='serverSettingsBtn'){openServerSettings();return;}
   if(target.id==='serverLoadBtn'){serverLoad();return;}
-  if(target.id==='serverSaveBtn' || target.id==='saveChampionsNow' || target.id==='saveScorersNow'){serverSave({silent:false});return;}
-  if(target.dataset.addGoal){addGoalEvent(target.dataset.addGoal,target.dataset.goalPhase,target.dataset.goalLabel);return;}
-  if(target.dataset.deleteGoal){deleteGoalEvent(target.dataset.deleteGoal);return;}
-  if(target.dataset.editScorer){editScorer(target.dataset.editScorer);return;}
-  if(target.dataset.deleteScorer){deleteScorer(target.dataset.deleteScorer);return;}
+  if(target.id==='serverSaveBtn' || target.id==='saveChampionsNow'){serverSave({silent:false});return;}
   if(target.id==='sampleTeams'){addSampleTeams();return;}
   if(target.id==='clearAll'){clearAll();return;}
   if(target.id==='runDraw'){runDraw();return;}
@@ -850,7 +815,7 @@ function handleChange(event) {
   if(target.matches('[data-third-score]')) updateThirdScore(target.dataset.thirdScore,target.value);
   if(target.matches('[data-po-score]')) updatePlayoffScore(target.dataset.poScore,target.dataset.side,target.value);
 }
-function handleSubmit(event) { if(event.target.id==='adminLoginForm'){authenticateAdminForm(event);return;} if(event.target.id==='addTeamForm')addTeam(event); if(event.target.id==='addChampionForm')addChampion(event); if(event.target.id==='addScorerForm')addScorer(event); }
+function handleSubmit(event) { if(event.target.id==='adminLoginForm'){authenticateAdminForm(event);return;} if(event.target.id==='addTeamForm')addTeam(event); if(event.target.id==='addChampionForm')addChampion(event); }
 document.addEventListener('click',handleClick);
 document.addEventListener('change',handleChange);
 document.addEventListener('submit',handleSubmit);
