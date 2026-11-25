@@ -117,7 +117,7 @@
       "home": "광주 FC",
       "away": "울산 HD",
       "homeScore": 2,
-      "awayScore": null
+      "awayScore": 5
     },
     {
       "id": "gm_mww6s9as_ew7v0h",
@@ -150,5 +150,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:57:00.010Z"
+  "updatedAt": "2026-11-25T13:57:02.763Z"
 }
