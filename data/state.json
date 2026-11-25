@@ -44,16 +44,16 @@
       "group": "A조",
       "home": "수원 블루윙즈",
       "away": "부산 아이파크",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 3,
+      "awayScore": 5
     },
     {
       "id": "gm_mww7f8i3_8of7ar",
       "group": "A조",
       "home": "수원 블루윙즈",
       "away": "광주 FC",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 3,
+      "awayScore": 4
     },
     {
       "id": "gm_mww7f8i3_a762be",
@@ -157,5 +157,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-25T14:13:56.133Z"
+  "updatedAt": "2026-11-25T14:13:59.193Z"
 }
