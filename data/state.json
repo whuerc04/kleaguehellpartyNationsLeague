@@ -36,8 +36,8 @@
       "group": "A조",
       "home": "수원 블루윙즈",
       "away": "울산 HD",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 5,
+      "awayScore": 1
     },
     {
       "id": "gm_mww7f8i3_z6lk7y",
@@ -157,5 +157,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-25T14:13:51.991Z"
+  "updatedAt": "2026-11-25T14:13:56.133Z"
 }
