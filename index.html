@@ -116,7 +116,7 @@ const STORAGE_KEY = 'khl_nations_league_v2';
 const LEGACY_KEY = 'khl_nations_league_v1';
 const SUBS = {
   draw: [['participants', '참가인원'], ['draw', '그룹추첨']],
-  progress: [['league', '그룹리그'], ['standings', '리그순위'], ['bracket', '토너먼트'], ['scorers', '팀 득점 통계'], ['history', '역대 우승자']]
+  progress: [['league', '그룹리그'], ['standings', '리그순위'], ['bracket', '토너먼트'], ['scorers', '득점왕'], ['history', '역대 우승자']]
 };
 let state = { version: 2, teams: [], groups: [], matches: [], bracket: [], groupCount: 2, champions: [], tournamentId: null, ignoredChampionTournamentIds: [], thirdPlaceMatch: null, pointAdjustments: {}, playoffMatches: [], playoffDirect: [], eliminatedTeams: [] };
 let mainTab = 'draw', subTab = 'participants';
@@ -668,9 +668,9 @@ function scorersView() {
   const records = scorerTotals();
   const fixtures = allScoredFixtures();
   const topGoals = records.length ? records[0].goals : 0;
-  return `<div class="panel"><div class="panel-head"><div><h2>팀 득점 통계</h2><div class="desc">그룹리그·플레이오프·토너먼트·3·4위 결정전의 경기 점수를 자동 합산합니다. 선수별 득점 입력은 없습니다.</div></div><span class="pill">${fixtures.length}경기 반영</span></div>
-    <div class="notice" style="margin-bottom:14px">경기 점수를 입력하거나 수정하면 이 통계도 자동으로 갱신됩니다. 득점이 같으면 득실차, 팀 이름 순으로 표시합니다.</div>
-    ${records.length && fixtures.length ? `<div class="table-wrap"><table><thead><tr><th>순위</th><th>팀</th><th>경기</th><th>득점</th><th>실점</th><th>득실차</th></tr></thead><tbody>${records.map((item,index)=>{const rank=index>0&&item.goals===records[index-1].goals?'공동':index+1;return `<tr><td><b>${rank}</b></td><td class="team">${item.goals===topGoals?'⚽ ':''}${esc(item.team)}${item.goals===topGoals?' <span class="pill">득점 선두</span>':''}</td><td>${item.played}</td><td><b>${item.goals}</b></td><td>${item.conceded}</td><td>${item.diff>0?'+':''}${item.diff}</td></tr>`}).join('')}</tbody></table></div>` : `<div class="empty">아직 집계할 경기 결과가 없습니다. 그룹리그 또는 토너먼트 경기 점수를 입력하면 팀별 득점 순위가 표시됩니다.</div>`}
+  return `<div class="panel"><div class="panel-head"><div><h2>득점왕</h2><div class="desc">게임 대회 유저 이름별로 그룹리그·플레이오프·토너먼트·3·4위 결정전의 득점을 자동 합산합니다.</div></div><span class="pill">${fixtures.length}경기 반영</span></div>
+    <div class="notice" style="margin-bottom:14px">경기 점수를 입력하거나 수정하면 유저별 득점 통계가 자동으로 갱신됩니다. 득점이 같으면 득실차, 유저 이름 순으로 표시합니다.</div>
+    ${records.length && fixtures.length ? `<div class="table-wrap"><table><thead><tr><th>순위</th><th>유저 이름</th><th>경기</th><th>득점</th><th>실점</th><th>득실차</th></tr></thead><tbody>${records.map((item,index)=>{const rank=index>0&&item.goals===records[index-1].goals?'공동':index+1;return `<tr><td><b>${rank}</b></td><td class="team">${item.goals===topGoals?'⚽ ':''}${esc(item.team)}${item.goals===topGoals?' <span class="pill">득점 선두</span>':''}</td><td>${item.played}</td><td><b>${item.goals}</b></td><td>${item.conceded}</td><td>${item.diff>0?'+':''}${item.diff}</td></tr>`}).join('')}</tbody></table></div>` : `<div class="empty">아직 집계할 경기 결과가 없습니다. 그룹리그 또는 토너먼트 경기 점수를 입력하면 유저 이름별 득점 순위가 표시됩니다.</div>`}
   </div>`;
 }
 
