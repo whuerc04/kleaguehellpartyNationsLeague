@@ -128,7 +128,29 @@
       "awayScore": 6
     }
   ],
-  "bracket": [],
+  "bracket": [
+    {
+      "name": "4강",
+      "matches": [
+        {
+          "id": "ko_mww395go_rnbc5r",
+          "home": "광주 FC",
+          "away": "전북 현대",
+          "homeScore": null,
+          "awayScore": null,
+          "winner": null
+        },
+        {
+          "id": "ko_mww395go_7dyv1r",
+          "home": "대전 하나",
+          "away": "수원 블루윙즈",
+          "homeScore": null,
+          "awayScore": null,
+          "winner": null
+        }
+      ]
+    }
+  ],
   "groupCount": 2,
   "champions": [
     {
@@ -146,7 +168,7 @@
       "source": "manual"
     }
   ],
-  "tournamentId": null,
+  "tournamentId": "tournament_mww395go_tkrs9h",
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:16:47.467Z"
+  "updatedAt": "2026-11-25T12:17:09.652Z"
 }
