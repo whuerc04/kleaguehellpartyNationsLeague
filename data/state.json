@@ -129,48 +129,20 @@
     }
   ],
   "bracket": [],
-  "playoffBracket": [
-    {
-      "name": "4강 플레이오프",
-      "matches": [
-        {
-          "id": "po_mww7g6o8_vf55m3",
-          "home": "울산 HD",
-          "away": "포항 스틸러스",
-          "homeScore": 2,
-          "awayScore": 2,
-          "winner": null
-        },
-        {
-          "id": "po_mww7g6o8_vqih2v",
-          "home": "서울 FC",
-          "away": "수원 블루윙즈",
-          "homeScore": 2,
-          "awayScore": null,
-          "winner": null
-        }
-      ]
-    }
-  ],
-  "playoffConfig": {
-    "direct": 2,
-    "teams": 4
-  },
-  "thirdPlace": null,
   "groupCount": 2,
   "champions": [
-    {
-      "id": "champ_mwvs8zj2_nlmggu",
-      "tournamentId": null,
-      "season": "2023-2024",
-      "team": "북하딱(서울)",
-      "source": "manual"
-    },
     {
       "id": "champ_mwvsal1v_cc8xsp",
       "tournamentId": null,
       "season": "2025-2026",
       "team": "볼(포항)",
+      "source": "manual"
+    },
+    {
+      "id": "champ_mwvs8zj2_nlmggu",
+      "tournamentId": null,
+      "season": "2023-2024",
+      "team": "북하딱(서울)",
       "source": "manual"
     }
   ],
@@ -179,5 +151,11 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-25T14:14:59.297Z"
+  "thirdPlaceMatch": null,
+  "pointAdjustments": {},
+  "playoffMatches": [],
+  "playoffDirect": [],
+  "eliminatedTeams": [],
+  "scorers": [],
+  "updatedAt": "2026-11-25T15:01:20.032Z"
 }
