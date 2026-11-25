@@ -117,15 +117,15 @@
       "home": "전북 현대",
       "away": "광주 FC",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 0
     },
     {
       "id": "gm_mww36cns_ujklqe",
       "group": "B조",
       "home": "부산 아이파크",
       "away": "광주 FC",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 2,
+      "awayScore": 2
     }
   ],
   "bracket": [],
@@ -148,5 +148,5 @@
   ],
   "tournamentId": null,
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:16:41.732Z"
+  "updatedAt": "2026-11-25T12:16:44.342Z"
 }
