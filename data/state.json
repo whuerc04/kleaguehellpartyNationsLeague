@@ -60,16 +60,16 @@
       "group": "A조",
       "home": "수원 블루윙즈",
       "away": "포항 스틸러스",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 2,
+      "awayScore": 1
     },
     {
       "id": "gm_mww6s9as_f5xht0",
       "group": "A조",
       "home": "수원 블루윙즈",
       "away": "전북 현대",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 3,
+      "awayScore": 0
     },
     {
       "id": "gm_mww6s9as_cv1cvr",
@@ -150,5 +150,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:56:24.235Z"
+  "updatedAt": "2026-11-25T13:56:39.615Z"
 }
