@@ -125,7 +125,7 @@
       "home": "부산 아이파크",
       "away": "광주 FC",
       "homeScore": 2,
-      "awayScore": 2
+      "awayScore": 6
     }
   ],
   "bracket": [],
@@ -148,5 +148,5 @@
   ],
   "tournamentId": null,
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:16:44.342Z"
+  "updatedAt": "2026-11-25T12:16:47.467Z"
 }
