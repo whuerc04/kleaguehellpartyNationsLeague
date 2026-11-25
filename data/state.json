@@ -36,15 +36,15 @@
       "group": "A조",
       "home": "대전 하나",
       "away": "수원 블루윙즈",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 1,
+      "awayScore": 2
     },
     {
       "id": "gm_mww6s9as_ey3k0q",
       "group": "A조",
       "home": "대전 하나",
       "away": "포항 스틸러스",
-      "homeScore": null,
+      "homeScore": 1,
       "awayScore": null
     },
     {
@@ -150,5 +150,5 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h"
   ],
-  "updatedAt": "2026-11-25T13:55:59.970Z"
+  "updatedAt": "2026-11-25T13:56:04.899Z"
 }
