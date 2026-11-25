@@ -144,7 +144,7 @@
           "id": "ko_mww395go_7dyv1r",
           "home": "대전 하나",
           "away": "수원 블루윙즈",
-          "homeScore": null,
+          "homeScore": 1,
           "awayScore": null,
           "winner": null
         }
@@ -170,5 +170,5 @@
   ],
   "tournamentId": "tournament_mww395go_tkrs9h",
   "ignoredChampionTournamentIds": [],
-  "updatedAt": "2026-11-25T12:17:19.157Z"
+  "updatedAt": "2026-11-25T12:17:21.229Z"
 }
