@@ -1,6 +1,15 @@
 {
   "version": 2,
-  "teams": [],
+  "teams": [
+    "서울 FC",
+    "부산 아이파크",
+    "수원 블루윙즈",
+    "울산 HD",
+    "전북 현대",
+    "대전 하나",
+    "포항 스틸러스",
+    "광주 FC"
+  ],
   "groups": [],
   "matches": [],
   "bracket": [],
@@ -27,5 +36,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:06:11.181Z"
+  "updatedAt": "2026-11-26T14:06:17.111Z"
 }
