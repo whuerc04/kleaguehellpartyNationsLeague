@@ -150,6 +150,19 @@
           "awayScore": 2,
           "homePenaltyScore": null,
           "awayPenaltyScore": null,
+          "winner": "수원 블루윙즈"
+        }
+      ]
+    },
+    {
+      "name": "결승",
+      "matches": [
+        {
+          "id": "ko_mwxmaahq_85q1fh",
+          "home": "광주 FC",
+          "away": "수원 블루윙즈",
+          "homeScore": null,
+          "awayScore": null,
           "winner": null
         }
       ]
@@ -177,5 +190,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-26T13:57:30.787Z"
+  "updatedAt": "2026-11-26T13:57:41.724Z"
 }
