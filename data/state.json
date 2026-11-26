@@ -77,39 +77,39 @@
       "home": "대전 하나",
       "away": "포항 스틸러스",
       "homeScore": 5,
-      "awayScore": null
+      "awayScore": 3
     },
     {
       "id": "gm_mwxmlt3e_p7wmto",
       "group": "B조",
       "home": "전북 현대",
       "away": "울산 HD",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 1,
+      "awayScore": 2
     },
     {
       "id": "gm_mwxmlt3e_389lwo",
       "group": "B조",
       "home": "전북 현대",
       "away": "수원 블루윙즈",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 3,
+      "awayScore": 5
     },
     {
       "id": "gm_mwxmlt3e_ym83jo",
       "group": "B조",
       "home": "전북 현대",
       "away": "서울 FC",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 1,
+      "awayScore": 3
     },
     {
       "id": "gm_mwxmlt3e_ndml62",
       "group": "B조",
       "home": "울산 HD",
       "away": "수원 블루윙즈",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 1,
+      "awayScore": 56
     },
     {
       "id": "gm_mwxmlt3e_788kpg",
@@ -152,5 +152,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:07:01.897Z"
+  "updatedAt": "2026-11-26T14:07:08.365Z"
 }
