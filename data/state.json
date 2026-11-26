@@ -116,8 +116,8 @@
       "group": "B조",
       "home": "울산 HD",
       "away": "서울 FC",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 5,
+      "awayScore": 3
     },
     {
       "id": "gm_mwxmlt3e_hmow3f",
@@ -152,5 +152,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:07:11.155Z"
+  "updatedAt": "2026-11-26T14:07:14.718Z"
 }
