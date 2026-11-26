@@ -157,7 +157,7 @@
       "id": "po_mwxmzvxe_6xcetc",
       "home": "부산 아이파크",
       "away": "포항 스틸러스",
-      "homeScore": null,
+      "homeScore": 1,
       "awayScore": null,
       "homePenaltyScore": null,
       "awayPenaltyScore": null,
@@ -189,5 +189,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:17:43.284Z"
+  "updatedAt": "2026-11-26T14:17:45.055Z"
 }
