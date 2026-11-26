@@ -201,7 +201,7 @@
           "awayScore": 0,
           "homePenaltyScore": null,
           "awayPenaltyScore": null,
-          "winner": null
+          "winner": "수원 블루윙즈"
         }
       ]
     }
@@ -211,13 +211,20 @@
     "home": "포항 스틸러스",
     "away": "울산 HD",
     "homeScore": 5,
-    "awayScore": null,
+    "awayScore": 4,
     "homePenaltyScore": null,
     "awayPenaltyScore": null,
     "winner": null
   },
   "groupCount": 2,
   "champions": [
+    {
+      "id": "champ_mwxn19wm_7jw7s3",
+      "tournamentId": "tournament_mwxmzvxe_jv546x",
+      "season": "2026",
+      "team": "수원 블루윙즈",
+      "source": "auto"
+    },
     {
       "id": "champ_mwvsal1v_cc8xsp",
       "tournamentId": null,
@@ -239,5 +246,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:18:37.695Z"
+  "updatedAt": "2026-11-26T14:18:40.661Z"
 }
