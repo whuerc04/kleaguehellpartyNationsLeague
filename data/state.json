@@ -147,7 +147,7 @@
       "id": "po_mwxmzvxe_zk0dco",
       "home": "울산 HD",
       "away": "서울 FC",
-      "homeScore": null,
+      "homeScore": 1,
       "awayScore": null,
       "homePenaltyScore": null,
       "awayPenaltyScore": null,
@@ -189,5 +189,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:17:35.882Z"
+  "updatedAt": "2026-11-26T14:17:39.953Z"
 }
