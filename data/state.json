@@ -128,29 +128,44 @@
       "awayScore": 3
     }
   ],
-  "bracket": [
+  "playoffDirectTeams": [
+    "수원 블루윙즈",
+    "대전 하나"
+  ],
+  "playoffEntrants": [
+    "울산 HD",
+    "부산 아이파크",
+    "포항 스틸러스",
+    "서울 FC"
+  ],
+  "eliminatedTeams": [
+    "광주 FC",
+    "전북 현대"
+  ],
+  "playoffMatches": [
     {
-      "name": "4강",
-      "matches": [
-        {
-          "id": "ko_mwxmmqfb_qr654f",
-          "home": "수원 블루윙즈",
-          "away": "부산 아이파크",
-          "homeScore": null,
-          "awayScore": null,
-          "winner": null
-        },
-        {
-          "id": "ko_mwxmmqfb_znsuep",
-          "home": "대전 하나",
-          "away": "울산 HD",
-          "homeScore": null,
-          "awayScore": null,
-          "winner": null
-        }
-      ]
+      "id": "po_mwxmzvxe_zk0dco",
+      "home": "울산 HD",
+      "away": "서울 FC",
+      "homeScore": null,
+      "awayScore": null,
+      "homePenaltyScore": null,
+      "awayPenaltyScore": null,
+      "winner": null
+    },
+    {
+      "id": "po_mwxmzvxe_6xcetc",
+      "home": "부산 아이파크",
+      "away": "포항 스틸러스",
+      "homeScore": null,
+      "awayScore": null,
+      "homePenaltyScore": null,
+      "awayPenaltyScore": null,
+      "winner": null
     }
   ],
+  "bracket": [],
+  "thirdPlaceMatch": null,
   "groupCount": 2,
   "champions": [
     {
@@ -168,11 +183,11 @@
       "source": "manual"
     }
   ],
-  "tournamentId": "tournament_mwxmmqfb_33bkxs",
+  "tournamentId": "tournament_mwxmzvxe_jv546x",
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:07:22.248Z"
+  "updatedAt": "2026-11-26T14:17:35.882Z"
 }
