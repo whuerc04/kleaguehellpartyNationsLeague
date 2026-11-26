@@ -210,7 +210,7 @@
     "id": "third_mwxn0vso_xmzlw9",
     "home": "포항 스틸러스",
     "away": "울산 HD",
-    "homeScore": null,
+    "homeScore": 5,
     "awayScore": null,
     "homePenaltyScore": null,
     "awayPenaltyScore": null,
@@ -239,5 +239,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:18:36.170Z"
+  "updatedAt": "2026-11-26T14:18:37.695Z"
 }
