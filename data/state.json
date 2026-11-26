@@ -173,7 +173,7 @@
           "home": "수원 블루윙즈",
           "away": "포항 스틸러스",
           "homeScore": 5,
-          "awayScore": null,
+          "awayScore": 2,
           "homePenaltyScore": null,
           "awayPenaltyScore": null,
           "winner": null
@@ -182,7 +182,7 @@
           "id": "ko_mwxn0dri_5wo97n",
           "home": "대전 하나",
           "away": "울산 HD",
-          "homeScore": null,
+          "homeScore": 4,
           "awayScore": null,
           "homePenaltyScore": null,
           "awayPenaltyScore": null,
@@ -215,5 +215,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:18:08.043Z"
+  "updatedAt": "2026-11-26T14:18:11.508Z"
 }
