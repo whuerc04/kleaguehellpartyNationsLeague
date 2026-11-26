@@ -14,116 +14,116 @@
     {
       "name": "A조",
       "teams": [
-        "서울 FC",
-        "포항 스틸러스",
         "부산 아이파크",
-        "수원 블루윙즈"
+        "광주 FC",
+        "대전 하나",
+        "포항 스틸러스"
       ]
     },
     {
       "name": "B조",
       "teams": [
+        "전북 현대",
         "울산 HD",
-        "광주 FC",
-        "대전 하나",
-        "전북 현대"
+        "수원 블루윙즈",
+        "서울 FC"
       ]
     }
   ],
   "matches": [
     {
-      "id": "gm_mwxmljr4_uzzlm3",
-      "group": "A조",
-      "home": "서울 FC",
-      "away": "포항 스틸러스",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "id": "gm_mwxmljr4_rxog10",
-      "group": "A조",
-      "home": "서울 FC",
-      "away": "부산 아이파크",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "id": "gm_mwxmljr4_s2bnsa",
-      "group": "A조",
-      "home": "서울 FC",
-      "away": "수원 블루윙즈",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "id": "gm_mwxmljr4_0dek7w",
-      "group": "A조",
-      "home": "포항 스틸러스",
-      "away": "부산 아이파크",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "id": "gm_mwxmljr4_dg1uq2",
-      "group": "A조",
-      "home": "포항 스틸러스",
-      "away": "수원 블루윙즈",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "id": "gm_mwxmljr4_qfn225",
+      "id": "gm_mwxmlt3e_tst2o6",
       "group": "A조",
       "home": "부산 아이파크",
-      "away": "수원 블루윙즈",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "id": "gm_mwxmljr4_qu57jz",
-      "group": "B조",
-      "home": "울산 HD",
       "away": "광주 FC",
       "homeScore": null,
       "awayScore": null
     },
     {
-      "id": "gm_mwxmljr4_40ptx9",
-      "group": "B조",
-      "home": "울산 HD",
+      "id": "gm_mwxmlt3e_eb253c",
+      "group": "A조",
+      "home": "부산 아이파크",
       "away": "대전 하나",
       "homeScore": null,
       "awayScore": null
     },
     {
-      "id": "gm_mwxmljr4_yesykq",
-      "group": "B조",
-      "home": "울산 HD",
-      "away": "전북 현대",
+      "id": "gm_mwxmlt3e_6h5k0k",
+      "group": "A조",
+      "home": "부산 아이파크",
+      "away": "포항 스틸러스",
       "homeScore": null,
       "awayScore": null
     },
     {
-      "id": "gm_mwxmljr4_aezufn",
-      "group": "B조",
+      "id": "gm_mwxmlt3e_tyw3xg",
+      "group": "A조",
       "home": "광주 FC",
       "away": "대전 하나",
       "homeScore": null,
       "awayScore": null
     },
     {
-      "id": "gm_mwxmljr4_z9m5rw",
-      "group": "B조",
+      "id": "gm_mwxmlt3e_ou2lhz",
+      "group": "A조",
       "home": "광주 FC",
-      "away": "전북 현대",
+      "away": "포항 스틸러스",
       "homeScore": null,
       "awayScore": null
     },
     {
-      "id": "gm_mwxmljr4_88dnkc",
-      "group": "B조",
+      "id": "gm_mwxmlt3e_bbo085",
+      "group": "A조",
       "home": "대전 하나",
-      "away": "전북 현대",
+      "away": "포항 스틸러스",
+      "homeScore": null,
+      "awayScore": null
+    },
+    {
+      "id": "gm_mwxmlt3e_p7wmto",
+      "group": "B조",
+      "home": "전북 현대",
+      "away": "울산 HD",
+      "homeScore": null,
+      "awayScore": null
+    },
+    {
+      "id": "gm_mwxmlt3e_389lwo",
+      "group": "B조",
+      "home": "전북 현대",
+      "away": "수원 블루윙즈",
+      "homeScore": null,
+      "awayScore": null
+    },
+    {
+      "id": "gm_mwxmlt3e_ym83jo",
+      "group": "B조",
+      "home": "전북 현대",
+      "away": "서울 FC",
+      "homeScore": null,
+      "awayScore": null
+    },
+    {
+      "id": "gm_mwxmlt3e_ndml62",
+      "group": "B조",
+      "home": "울산 HD",
+      "away": "수원 블루윙즈",
+      "homeScore": null,
+      "awayScore": null
+    },
+    {
+      "id": "gm_mwxmlt3e_788kpg",
+      "group": "B조",
+      "home": "울산 HD",
+      "away": "서울 FC",
+      "homeScore": null,
+      "awayScore": null
+    },
+    {
+      "id": "gm_mwxmlt3e_hmow3f",
+      "group": "B조",
+      "home": "수원 블루윙즈",
+      "away": "서울 FC",
       "homeScore": null,
       "awayScore": null
     }
@@ -152,5 +152,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:06:26.943Z"
+  "updatedAt": "2026-11-26T14:06:39.022Z"
 }
