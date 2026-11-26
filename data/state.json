@@ -117,14 +117,14 @@
       "home": "광주 FC",
       "away": "전북 현대",
       "homeScore": 3,
-      "awayScore": null
+      "awayScore": 2
     },
     {
       "id": "gm_mwxm2uhz_esw5jf",
       "group": "B조",
       "home": "울산 HD",
       "away": "전북 현대",
-      "homeScore": null,
+      "homeScore": 1,
       "awayScore": null
     }
   ],
@@ -151,5 +151,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-26T13:52:59.923Z"
+  "updatedAt": "2026-11-26T13:53:02.313Z"
 }
