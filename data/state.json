@@ -128,7 +128,29 @@
       "awayScore": 3
     }
   ],
-  "bracket": [],
+  "bracket": [
+    {
+      "name": "4강",
+      "matches": [
+        {
+          "id": "ko_mwxmmqfb_qr654f",
+          "home": "수원 블루윙즈",
+          "away": "부산 아이파크",
+          "homeScore": null,
+          "awayScore": null,
+          "winner": null
+        },
+        {
+          "id": "ko_mwxmmqfb_znsuep",
+          "home": "대전 하나",
+          "away": "울산 HD",
+          "homeScore": null,
+          "awayScore": null,
+          "winner": null
+        }
+      ]
+    }
+  ],
   "groupCount": 2,
   "champions": [
     {
@@ -146,11 +168,11 @@
       "source": "manual"
     }
   ],
-  "tournamentId": null,
+  "tournamentId": "tournament_mwxmmqfb_33bkxs",
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:07:19.807Z"
+  "updatedAt": "2026-11-26T14:07:22.248Z"
 }
