@@ -53,15 +53,15 @@
       "home": "대전 하나",
       "away": "수원 블루윙즈",
       "homeScore": 5,
-      "awayScore": null
+      "awayScore": 4
     },
     {
       "id": "gm_mwxm2uhz_nw0m1s",
       "group": "A조",
       "home": "서울 FC",
       "away": "포항 스틸러스",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 7,
+      "awayScore": 8
     },
     {
       "id": "gm_mwxm2uhz_de9390",
@@ -151,5 +151,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-26T13:52:45.597Z"
+  "updatedAt": "2026-11-26T13:52:47.514Z"
 }
