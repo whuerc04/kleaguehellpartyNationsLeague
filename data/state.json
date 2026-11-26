@@ -149,7 +149,7 @@
       "away": "서울 FC",
       "homeScore": 1,
       "awayScore": 1,
-      "homePenaltyScore": null,
+      "homePenaltyScore": 5,
       "awayPenaltyScore": null,
       "winner": null
     },
@@ -189,5 +189,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:17:48.953Z"
+  "updatedAt": "2026-11-26T14:17:55.388Z"
 }
