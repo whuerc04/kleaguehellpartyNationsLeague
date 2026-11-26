@@ -139,8 +139,8 @@
           "homeScore": 1,
           "awayScore": 1,
           "homePenaltyScore": 1,
-          "awayPenaltyScore": null,
-          "winner": null
+          "awayPenaltyScore": 3,
+          "winner": "광주 FC"
         },
         {
           "id": "ko_mwxm4ixq_g43hhn",
@@ -177,5 +177,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-26T13:57:28.287Z"
+  "updatedAt": "2026-11-26T13:57:30.787Z"
 }
