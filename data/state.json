@@ -1,6 +1,15 @@
 {
   "version": 2,
-  "teams": [],
+  "teams": [
+    "서울 FC",
+    "부산 아이파크",
+    "수원 블루윙즈",
+    "울산 HD",
+    "전북 현대",
+    "대전 하나",
+    "포항 스틸러스",
+    "광주 FC"
+  ],
   "groups": [],
   "matches": [],
   "bracket": [],
@@ -26,10 +35,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "thirdPlaceMatch": null,
-  "pointAdjustments": {},
-  "playoffMatches": [],
-  "playoffDirect": [],
-  "eliminatedTeams": [],
-  "updatedAt": "2026-11-25T15:26:58.166Z"
+  "updatedAt": "2026-11-26T13:51:49.911Z"
 }
