@@ -198,7 +198,7 @@
           "home": "수원 블루윙즈",
           "away": "대전 하나",
           "homeScore": 1,
-          "awayScore": null,
+          "awayScore": 0,
           "homePenaltyScore": null,
           "awayPenaltyScore": null,
           "winner": null
@@ -239,5 +239,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:18:32.648Z"
+  "updatedAt": "2026-11-26T14:18:36.170Z"
 }
