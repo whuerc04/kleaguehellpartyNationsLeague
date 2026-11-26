@@ -73,6 +73,20 @@ input,select{transition:border-color .18s ease,box-shadow .18s ease}input:focus,
  .bracket-team b{font-size:16px}
  .match .home,.match .away{font-size:12px}
 }
+
+/* Animated group draw */
+.draw-overlay{position:fixed;inset:0;z-index:9999;background:rgba(5,10,22,.88);backdrop-filter:blur(10px);display:grid;place-items:center;padding:18px;animation:drawFadeIn .25s ease both}
+.draw-stage{width:min(760px,100%);max-height:90vh;overflow:auto;background:linear-gradient(145deg,#18243a,#0d1423);border:1px solid #ffffff24;border-radius:22px;padding:clamp(20px,4vw,34px);color:#fff;box-shadow:0 24px 90px #0009;text-align:center}
+.draw-kicker{font-size:11px;letter-spacing:.2em;font-weight:900;color:#9fb7e9}
+.draw-stage h2{font-size:clamp(23px,4vw,34px);margin:10px 0 6px}.draw-subtitle{color:#b7c2d5;font-size:13px;margin:0 0 22px}
+.draw-slot{position:relative;overflow:hidden;border:1px solid #ffffff2b;border-radius:15px;background:linear-gradient(110deg,#253a5b,#182843);padding:19px 12px;margin:0 auto 18px;max-width:500px}
+.draw-slot-label{display:block;color:#aebed7;font-size:11px;margin-bottom:8px}.draw-slot strong{display:block;position:relative;z-index:1;font-size:clamp(22px,5vw,34px);font-weight:900;min-height:1.3em;overflow-wrap:anywhere}.draw-slot-glow{position:absolute;inset:0;background:linear-gradient(100deg,transparent,#ffffff12,transparent);transform:translateX(-100%);animation:drawSweep 1.2s linear infinite}
+.draw-pop{animation:drawPop .16s ease}.draw-progress-track{height:7px;border-radius:20px;background:#ffffff20;overflow:hidden}.draw-progress-track span{display:block;width:0;height:100%;border-radius:20px;background:linear-gradient(90deg,#55a7ff,#9b83ff);transition:width .18s ease}.draw-progress-text{font-size:12px;color:#bdc9dc;margin:9px 0 17px;font-variant-numeric:tabular-nums}
+.draw-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;text-align:left}.draw-group{background:#ffffff0c;border:1px solid #ffffff1a;border-radius:12px;padding:11px}.draw-group>b{display:block;color:#a9c7ff;font-size:13px;margin-bottom:8px}.draw-group>div{display:grid;gap:5px}.draw-team{display:block;border-radius:7px;background:#ffffff0b;color:#dce5f4;padding:7px 8px;font-size:12px;overflow-wrap:anywhere}.draw-team.waiting{color:#8190a8;border:1px dashed #ffffff24}.draw-team.revealed{background:#254b48;color:#b9ffe5;animation:drawReveal .35s ease both}.draw-final{margin-top:18px;padding:13px;border-radius:10px;background:#1d5949;color:#baffdf;font-weight:900;animation:drawReveal .45s ease both}
+@keyframes drawFadeIn{from{opacity:0}to{opacity:1}}@keyframes drawPop{0%{transform:translateY(7px);opacity:.45}100%{transform:translateY(0);opacity:1}}@keyframes drawSweep{to{transform:translateX(100%)}}@keyframes drawReveal{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.draw-overlay,.draw-slot-glow,.draw-pop,.draw-team.revealed,.draw-final{animation:none!important}.draw-progress-track span{transition:none}}
+@media(max-width:480px){.draw-stage{padding:18px 13px;border-radius:16px}.draw-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style>
 </head>
 <body>
@@ -447,21 +461,71 @@ function drawView() {
     <div class="notice" style="margin-top:14px">통합 리그순위의 경기 수를 동일하게 맞추기 위해 참가 팀 수가 그룹 수로 나누어떨어지는 2·4·8개 그룹만 선택할 수 있습니다. 전체 조 통합 리그순위 상위 팀이 토너먼트에 진출합니다. 재추첨 시 기존 결과는 초기화됩니다.</div>
     ${state.groups.length ? groupCards() : '<div class="empty">아직 그룹 추첨이 진행되지 않았습니다.</div>'}</div>`;
 }
-function runDraw() {
-  if (!requireAdmin()) return;
+let drawInProgress = false;
+const waitForDraw = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+async function runDraw() {
+  if (!requireAdmin() || drawInProgress) return;
   const count = Number($('#groupCount')?.value);
   if (!count || count > Math.floor(state.teams.length/2)) { toast('선택한 그룹 수를 확인해주세요.'); return; }
   if (state.groups.length && !window.confirm('다시 추첨하면 기존 조별 경기 결과와 토너먼트가 초기화됩니다. 진행할까요?')) return;
-  state.groupCount = count;
+
+  drawInProgress = true;
+  const trigger = $('#runDraw');
+  if (trigger) { trigger.disabled = true; trigger.textContent = '추첨 진행 중…'; }
   const shuffled = [...state.teams];
   for (let i=shuffled.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]; }
-  state.groups = Array.from({length:count},(_,i)=>({name:`${String.fromCharCode(65+i)}조`,teams:[]}));
-  shuffled.forEach((team,index)=>state.groups[index%count].teams.push(team));
-  state.matches=[];
-  state.groups.forEach(group=>{
-    for(let i=0;i<group.teams.length;i++) for(let j=i+1;j<group.teams.length;j++) state.matches.push({id:uid('gm'),group:group.name,home:group.teams[i],away:group.teams[j],homeScore:null,awayScore:null});
-  });
-  state.bracket=[]; markDirty(); render();
+  const drawnGroups = Array.from({length:count},(_,i)=>({name:`${String.fromCharCode(65+i)}조`,teams:[]}));
+  shuffled.forEach((team,index)=>drawnGroups[index%count].teams.push(team));
+
+  const root = $('#modalRoot');
+  root.innerHTML = `<div class="draw-overlay" role="dialog" aria-modal="true" aria-label="그룹 추첨 진행">
+    <div class="draw-stage">
+      <div class="draw-kicker">KHL · RANDOM DRAW</div>
+      <h2>그룹 추첨 진행 중</h2>
+      <p class="draw-subtitle">참가 팀을 무작위로 섞어 각 그룹에 배정합니다.</p>
+      <div class="draw-slot"><span class="draw-slot-label">추첨 중인 참가 팀</span><strong id="drawSlotName">추첨 준비 중</strong><span class="draw-slot-glow"></span></div>
+      <div class="draw-progress-track"><span id="drawProgressBar"></span></div>
+      <div class="draw-progress-text" id="drawProgressText">0 / ${shuffled.length} 팀 배정 완료</div>
+      <div class="draw-groups" id="drawGroups">${drawnGroups.map(g=>`<div class="draw-group"><b>${esc(g.name)}</b><div>${g.teams.map((_,i)=>`<span class="draw-team waiting" data-draw-slot="${g.name}-${i}">대기 중</span>`).join('')}</div></div>`).join('')}</div>
+      <div class="draw-final" id="drawFinal" hidden>추첨 완료! 그룹 편성이 확정되었습니다.</div>
+    </div>
+  </div>`;
+
+  try {
+    let completed = 0;
+    for (let groupIndex=0; groupIndex<drawnGroups.length; groupIndex++) {
+      const group = drawnGroups[groupIndex];
+      for (let teamIndex=0; teamIndex<group.teams.length; teamIndex++) {
+        const team = group.teams[teamIndex];
+        const slot = root.querySelector(`[data-draw-slot="${group.name}-${teamIndex}"]`);
+        const slotName = $('#drawSlotName');
+        for (let tick=0; tick<7; tick++) {
+          slotName.textContent = shuffled[Math.floor(Math.random()*shuffled.length)];
+          slotName.classList.remove('draw-pop'); void slotName.offsetWidth; slotName.classList.add('draw-pop');
+          await waitForDraw(55 + tick*9);
+        }
+        slotName.textContent = team;
+        if (slot) { slot.textContent = team; slot.classList.remove('waiting'); slot.classList.add('revealed'); }
+        completed++;
+        $('#drawProgressText').textContent = `${completed} / ${shuffled.length} 팀 배정 완료`;
+        $('#drawProgressBar').style.width = `${completed/shuffled.length*100}%`;
+        await waitForDraw(130);
+      }
+    }
+    $('#drawFinal').hidden = false;
+    await waitForDraw(850);
+    state.groupCount = count;
+    state.groups = drawnGroups;
+    state.matches=[];
+    state.groups.forEach(group=>{
+      for(let i=0;i<group.teams.length;i++) for(let j=i+1;j<group.teams.length;j++) state.matches.push({id:uid('gm'),group:group.name,home:group.teams[i],away:group.teams[j],homeScore:null,awayScore:null});
+    });
+    state.bracket=[]; markDirty();
+  } finally {
+    root.innerHTML = '';
+    drawInProgress = false;
+    render();
+  }
 }
 function groupCards() {
   return `<div class="group-grid" style="margin-top:16px">${state.groups.map(group=>`<div class="group-card"><div class="group-title"><span>${esc(group.name)}</span><span>${group.teams.length} TEAMS</span></div><table><tbody>${group.teams.map((team,index)=>`<tr><td style="width:32px;color:#8a96a8">${String(index+1).padStart(2,'0')}</td><td class="team">${esc(team)}</td></tr>`).join('')}</tbody></table></div>`).join('')}</div>`;
@@ -525,14 +589,17 @@ function updateBracketScore(roundIndex,matchId,side,value) {
   const match=round.matches.find(m=>m.id===matchId);if(!match)return;
   const score=value===''?null:Number(value);if(score!==null&&(!Number.isInteger(score)||score<0)){toast('점수는 0 이상의 정수로 입력해주세요.');render();return;}
   match[side==='home'?'homeScore':'awayScore']=score;match.winner=null;match.homePenaltyScore=null;match.awayPenaltyScore=null;
-  state.bracket=state.bracket.slice(0,roundIndex+1);markDirty();
+  // 점수 수정은 해당 경기만 갱신한다. 다른 경기와 이후 라운드 기록은 보존한다.
+  markDirty();render();
 }
 function updatePenaltyScore(roundIndex,matchId,side,value) {
   if(!requireAdmin())return;
   const round=state.bracket[roundIndex],match=round?.matches.find(m=>m.id===matchId);if(!match)return;
   if(match.homeScore===null||match.awayScore===null||match.homeScore!==match.awayScore){toast('정규/연장전 점수가 동점인 경기에서만 승부차기 점수를 입력할 수 있습니다.');render();return;}
   const score=value===''?null:Number(value);if(score!==null&&(!Number.isInteger(score)||score<0)){toast('승부차기 점수는 0 이상의 정수로 입력해주세요.');render();return;}
-  match[side==='home'?'homePenaltyScore':'awayPenaltyScore']=score;match.winner=null;state.bracket=state.bracket.slice(0,roundIndex+1);markDirty();
+  match[side==='home'?'homePenaltyScore':'awayPenaltyScore']=score;match.winner=null;
+  // 승부차기 점수도 경기 ID 기준으로 해당 경기만 저장한다.
+  markDirty();render();
 }
 function confirmBracketWinner(roundIndex,matchId) {
   if(!requireAdmin())return;
