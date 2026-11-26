@@ -132,7 +132,7 @@ const SUBS = {
   draw: [['participants', '참가인원'], ['draw', '그룹추첨']],
   progress: [['league', '그룹리그'], ['standings', '리그순위'], ['bracket', '토너먼트'], ['history', '역대 우승자']]
 };
-let state = { version: 2, teams: [], groups: [], matches: [], bracket: [], thirdPlaceMatch: null, groupCount: 2, champions: [], tournamentId: null, ignoredChampionTournamentIds: [] };
+let state = { version: 2, teams: [], groups: [], matches: [], playoffDirectTeams: [], playoffEntrants: [], eliminatedTeams: [], playoffMatches: [], bracket: [], thirdPlaceMatch: null, groupCount: 2, champions: [], tournamentId: null, ignoredChampionTournamentIds: [] };
 let mainTab = 'draw', subTab = 'participants';
 let adminUnlocked = false, apiBase = '', adminToken = '';
 let serverUpdatedAt = null, serverFileSha = null, autoSaveTimer = null, isApplyingServerState = false, initialServerLoadDone = false;
@@ -167,6 +167,10 @@ function loadState(data) {
     teams: Array.isArray(data.teams) ? data.teams : [],
     groups: Array.isArray(data.groups) ? data.groups : [],
     matches: Array.isArray(data.matches) ? data.matches.map(normalizeGroupMatch) : [],
+    playoffDirectTeams: Array.isArray(data.playoffDirectTeams) ? data.playoffDirectTeams : [],
+    playoffEntrants: Array.isArray(data.playoffEntrants) ? data.playoffEntrants : [],
+    eliminatedTeams: Array.isArray(data.eliminatedTeams) ? data.eliminatedTeams : [],
+    playoffMatches: Array.isArray(data.playoffMatches) ? data.playoffMatches.map(normalizeBracketMatch) : [],
     bracket: Array.isArray(data.bracket) ? data.bracket.map(normalizeBracketRound) : [],
     thirdPlaceMatch: data.thirdPlaceMatch ? normalizeBracketMatch(data.thirdPlaceMatch) : null,
     groupCount: Number(data.groupCount) || 2,
@@ -353,7 +357,7 @@ async function serverLoad({silent=false, force=false}={}) {
       if (!silent) toast('저장소에 대회 데이터가 없습니다. 관리자 인증 후 데이터를 등록하고 저장해주세요.');
       return;
     }
-    const hasLocal = state.teams.length || state.groups.length || state.matches.length || state.bracket.length || state.champions.length;
+    const hasLocal = state.teams.length || state.groups.length || state.matches.length || state.playoffMatches.length || state.bracket.length || state.champions.length;
     if (!silent && !force && hasLocal && !window.confirm('GitHub 저장소의 최신 데이터로 현재 화면을 교체할까요?')) return;
     isApplyingServerState = true;
     loadState(result.state); serverUpdatedAt = result.updatedAt || null; serverFileSha = result.sha; persistLocal(); render();
@@ -456,7 +460,7 @@ function clearAll() {
   if (!window.confirm('참가 팀과 모든 대회 기록을 삭제할까요? 이 작업은 되돌릴 수 없습니다.')) return;
   state.teams=[]; resetCompetition(); markDirty(); render();
 }
-function resetCompetition() { state.groups=[]; state.matches=[]; state.bracket=[]; state.thirdPlaceMatch=null; state.tournamentId=null; }
+function resetCompetition() { state.groups=[]; state.matches=[]; state.playoffDirectTeams=[]; state.playoffEntrants=[]; state.eliminatedTeams=[]; state.playoffMatches=[]; state.bracket=[]; state.thirdPlaceMatch=null; state.tournamentId=null; }
 function groupOptions() {
   const max = Math.floor(state.teams.length / 2);
   return [2,4,8].filter(n => n <= max && state.teams.length % n === 0).map(n => `<option value="${n}" ${state.groupCount===n?'selected':''}>${n}개 그룹 (${n*2}팀 토너먼트)</option>`).join('');
@@ -527,7 +531,7 @@ async function runDraw() {
     state.groups.forEach(group=>{
       for(let i=0;i<group.teams.length;i++) for(let j=i+1;j<group.teams.length;j++) state.matches.push({id:uid('gm'),group:group.name,home:group.teams[i],away:group.teams[j],homeScore:null,awayScore:null});
     });
-    state.bracket=[]; markDirty();
+    state.playoffDirectTeams=[]; state.playoffEntrants=[]; state.eliminatedTeams=[]; state.playoffMatches=[]; state.bracket=[]; state.thirdPlaceMatch=null; markDirty();
   } finally {
     root.innerHTML = '';
     drawInProgress = false;
@@ -549,7 +553,7 @@ function updateGroupScore(matchId,side,value) {
   if (!requireAdmin()) { render(); return; }
   const match=state.matches.find(m=>m.id===matchId); if(!match)return;
   const score=value===''?null:Number(value); if(score!==null&&(!Number.isInteger(score)||score<0)){toast('점수는 0 이상의 정수로 입력해주세요.');render();return;}
-  match[side==='home'?'homeScore':'awayScore']=score; state.bracket=[]; markDirty(); renderStats();
+  match[side==='home'?'homeScore':'awayScore']=score; state.playoffDirectTeams=[]; state.playoffEntrants=[]; state.eliminatedTeams=[]; state.playoffMatches=[]; state.bracket=[]; state.thirdPlaceMatch=null; markDirty(); renderStats();
 }
 function teamStats(team,groupName=null) {
   const row={team,mp:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0};
@@ -572,23 +576,94 @@ function standingsView() {
     <div class="panel"><h2>그룹별 순위</h2><div class="group-grid" style="margin-top:14px">${state.groups.map(group=>`<div class="group-card"><div class="group-title">${esc(group.name)} 순위</div>${standingsTable(rankRows(group.teams,group.name))}</div>`).join('')}</div></div>`;
 }
 function allGroupMatchesComplete() { return state.groups.length>0 && state.groups.every(group=>state.matches.filter(m=>m.group===group.name).every(m=>m.homeScore!==null&&m.awayScore!==null)); }
-function bracketQualifiers() {
+function qualificationPlan() {
   if(!allGroupMatchesComplete())return null;
-  const qualifierCount = state.groups.length * 2;
-  return rankRows(state.teams).slice(0,qualifierCount).map(row=>row.team);
+  const ranked=rankRows(state.teams).map(row=>row.team), total=ranked.length;
+  if(total<4) return {ranked,direct:ranked,playoff:[],eliminated:[]};
+  const directCount=Math.max(1,Math.round(total/4));
+  let playoffCount=Math.floor(total/2);
+  if(playoffCount%2) playoffCount--;
+  playoffCount=Math.min(playoffCount,total-directCount);
+  if(playoffCount<2) return {ranked,direct:ranked,playoff:[],eliminated:[]};
+  return {
+    ranked,
+    direct:ranked.slice(0,directCount),
+    playoff:ranked.slice(directCount,directCount+playoffCount),
+    eliminated:ranked.slice(directCount+playoffCount)
+  };
+}
+function makeMatch(home,away,prefix='ko') {
+  return {id:uid(prefix),home:home||'',away:away||'',homeScore:null,awayScore:null,homePenaltyScore:null,awayPenaltyScore:null,winner:home&&!away?home:away&&!home?away:null};
+}
+function createFirstRoundMatches(teams,prefix='ko') {
+  const size=2**Math.ceil(Math.log2(Math.max(2,teams.length)));
+  const slots=[...teams];
+  while(slots.length<size) slots.push(null);
+  const matches=[];
+  for(let i=0;i<size/2;i++) matches.push(makeMatch(slots[i],slots[size-1-i],prefix));
+  return matches;
+}
+function startMainBracket(qualifiers) {
+  const ordered=[...qualifiers];
+  if(ordered.length<2){state.bracket=[];return;}
+  const firstRound=createFirstRoundMatches(ordered,'ko');
+  state.bracket=[{name:roundLabel(firstRound.length),matches:firstRound}];
+  state.thirdPlaceMatch=null;
 }
 function makeBracket() {
   if(!requireAdmin())return;
-  const qualifiers=bracketQualifiers();
-  if(!qualifiers){toast('모든 조별리그 경기 결과를 입력한 뒤 토너먼트를 생성해주세요.');return;}
-  if(!window.confirm(`통합 리그순위 상위 ${qualifiers.length}팀으로 토너먼트 대진표를 생성할까요? 기존 토너먼트 기록은 초기화됩니다.`))return;
-  const pairs=[]; const n=qualifiers.length;
-  for(let i=0;i<n/2;i++) pairs.push({home:qualifiers[i],away:qualifiers[n-1-i]});
-  const firstRound=pairs.map(pair=>({id:uid('ko'),home:pair.home,away:pair.away,homeScore:null,awayScore:null,homePenaltyScore:null,awayPenaltyScore:null,winner:null}));
-  state.bracket=[{name:roundLabel(firstRound.length),matches:firstRound}];
+  const plan=qualificationPlan();
+  if(!plan){toast('모든 조별리그 경기 결과를 입력한 뒤 토너먼트를 생성해주세요.');return;}
+  const message=`통합 순위 기준으로 본선 직행 ${plan.direct.length}팀, 진출 플레이오프 ${plan.playoff.length}팀, 탈락 ${plan.eliminated.length}팀으로 편성할까요?\n\n8팀 참가 시: 상위 2팀 본선 직행 / 다음 4팀 플레이오프 / 하위 2팀 탈락`;
+  if(!window.confirm(message+'\n기존 토너먼트 기록은 초기화됩니다.'))return;
+  state.playoffDirectTeams=plan.direct;
+  state.playoffEntrants=plan.playoff;
+  state.eliminatedTeams=plan.eliminated;
+  state.playoffMatches=[];
+  state.bracket=[];
   state.thirdPlaceMatch=null;
   state.tournamentId=uid('tournament');
+  if(plan.playoff.length>=2){
+    const pairs=[];
+    for(let i=0;i<plan.playoff.length/2;i++) pairs.push({home:plan.playoff[i],away:plan.playoff[plan.playoff.length-1-i]});
+    state.playoffMatches=pairs.map(pair=>makeMatch(pair.home,pair.away,'po'));
+  } else {
+    startMainBracket(plan.direct);
+  }
   markDirty(); render();
+}
+function updatePlayoffScore(matchId,side,value) {
+  if(!requireAdmin())return;
+  const match=state.playoffMatches.find(m=>m.id===matchId); if(!match)return;
+  const score=value===''?null:Number(value);
+  if(score!==null&&(!Number.isInteger(score)||score<0)){toast('점수는 0 이상의 정수로 입력해주세요.');render();return;}
+  match[side==='home'?'homeScore':'awayScore']=score;
+  match.winner=null; match.homePenaltyScore=null; match.awayPenaltyScore=null;
+  state.bracket=[]; state.thirdPlaceMatch=null;
+  markDirty();render();
+}
+function updatePlayoffPenaltyScore(matchId,side,value) {
+  if(!requireAdmin())return;
+  const match=state.playoffMatches.find(m=>m.id===matchId); if(!match)return;
+  if(!isTiedMatch(match)){toast('플레이오프 경기가 동점일 때만 승부차기 점수를 입력할 수 있습니다.');render();return;}
+  const score=value===''?null:Number(value);
+  if(score!==null&&(!Number.isInteger(score)||score<0)){toast('승부차기 점수는 0 이상의 정수로 입력해주세요.');render();return;}
+  match[side==='home'?'homePenaltyScore':'awayPenaltyScore']=score; match.winner=null;
+  state.bracket=[]; state.thirdPlaceMatch=null;
+  markDirty();render();
+}
+function confirmPlayoffWinner(matchId) {
+  if(!requireAdmin())return;
+  const match=state.playoffMatches.find(m=>m.id===matchId); if(!match)return;
+  if(!decideMatchWinner(match,'플레이오프 승자'))return;
+  if(state.playoffMatches.every(m=>m.winner)){
+    const winners=state.playoffMatches.map(m=>m.winner);
+    const rankOrder=new Map(rankRows(state.teams).map((row,index)=>[row.team,index]));
+    const mainTeams=[...state.playoffDirectTeams,...winners].sort((a,b)=>(rankOrder.get(a)??999)-(rankOrder.get(b)??999));
+    startMainBracket(mainTeams);
+    toast('플레이오프가 완료됐습니다. 본선 진출팀으로 토너먼트 대진표를 생성했습니다.');
+  }
+  markDirty();render();
 }
 function roundLabel(matchCount) { return matchCount===1?'결승':matchCount===2?'4강':matchCount===4?'8강':matchCount===8?'16강':`${matchCount*2}강`; }
 function updateBracketScore(roundIndex,matchId,side,value) {
@@ -750,27 +825,57 @@ function penaltyBoardHtml(match, roundIndex=null, isThird=false) {
   return `<div class="penalty-board"><div class="penalty-title">⚽ 승부차기 점수판 · 동점 경기</div><div class="penalty-row"><span class="penalty-team">${esc(match.home)}</span><input type="number" min="0" step="1" aria-label="${esc(match.home)} 승부차기 점수" placeholder="홈" value="${home??''}" ${homeAttr} ${adminUnlocked?'':'disabled'}><span class="vs">PK</span><input type="number" min="0" step="1" aria-label="${esc(match.away)} 승부차기 점수" placeholder="원정" value="${away??''}" ${awayAttr} ${adminUnlocked?'':'disabled'}><span class="penalty-team">${esc(match.away)}</span></div><div class="penalty-result">${result}</div></div>`;
 }
 function bracketMatchHtml(match,ri){
+  const tied=isTiedMatch(match),bye=!match.home||!match.away;
+  return `<div class="bracket-match">
+    <div class="bracket-team ${match.winner===match.home&&match.home?'winner':''}"><span>${esc(match.home||'부전승')}</span><b>${match.home?match.homeScore??'–':'BYE'}</b></div>
+    <div class="bracket-team ${match.winner===match.away&&match.away?'winner':''}"><span>${esc(match.away||'부전승')}</span><b>${match.away?match.awayScore??'–':'BYE'}</b></div>
+    ${adminUnlocked&&!bye?`<div class="bracket-controls"><div class="rowform"><input type="number" min="0" step="1" aria-label="${esc(match.home)} 점수" placeholder="홈" value="${match.homeScore??''}" data-ko-score="${esc(match.id)}" data-round="${ri}" data-side="home"><input type="number" min="0" step="1" aria-label="${esc(match.away)} 점수" placeholder="원정" value="${match.awayScore??''}" data-ko-score="${esc(match.id)}" data-round="${ri}" data-side="away"><button class="btn btn-primary btn-small" data-confirm-winner="${esc(match.id)}" data-round="${ri}">${tied?'승부차기 승자 확정':'승자 확정'}</button></div></div>`:''}
+    ${bye?'<div class="bracket-controls" style="color:#16804a;font-size:10px;font-weight:800">부전승 · 자동 진출</div>':penaltyBoardHtml(match,ri,false)}
+    ${match.winner&&!bye?'<div class="bracket-controls" style="color:#16804a;font-size:10px;font-weight:800">승자 확정 · 다음 라운드 반영</div>':''}
+  </div>`;
+}
+function playoffMatchHtml(match){
   const tied=isTiedMatch(match);
   return `<div class="bracket-match">
     <div class="bracket-team ${match.winner===match.home?'winner':''}"><span>${esc(match.home)}</span><b>${match.homeScore??'–'}</b></div>
     <div class="bracket-team ${match.winner===match.away?'winner':''}"><span>${esc(match.away)}</span><b>${match.awayScore??'–'}</b></div>
-    ${adminUnlocked?`<div class="bracket-controls"><div class="rowform"><input type="number" min="0" step="1" aria-label="${esc(match.home)} 점수" placeholder="홈" value="${match.homeScore??''}" data-ko-score="${esc(match.id)}" data-round="${ri}" data-side="home"><input type="number" min="0" step="1" aria-label="${esc(match.away)} 점수" placeholder="원정" value="${match.awayScore??''}" data-ko-score="${esc(match.id)}" data-round="${ri}" data-side="away"><button class="btn btn-primary btn-small" data-confirm-winner="${esc(match.id)}" data-round="${ri}">${tied?'승부차기 승자 확정':'승자 확정'}</button></div></div>`:''}
-    ${penaltyBoardHtml(match,ri,false)}
-    ${match.winner?'<div class="bracket-controls" style="color:#16804a;font-size:10px;font-weight:800">승자 확정 · 다음 라운드 반영</div>':''}
+    ${adminUnlocked?`<div class="bracket-controls"><div class="rowform"><input type="number" min="0" step="1" aria-label="${esc(match.home)} 점수" placeholder="홈" value="${match.homeScore??''}" data-po-score="${esc(match.id)}" data-side="home"><input type="number" min="0" step="1" aria-label="${esc(match.away)} 점수" placeholder="원정" value="${match.awayScore??''}" data-po-score="${esc(match.id)}" data-side="away"><button class="btn btn-primary btn-small" data-confirm-playoff="${esc(match.id)}">${tied?'승부차기 승자 확정':'플레이오프 승자 확정'}</button></div></div>`:''}
+    ${playoffPenaltyBoardHtml(match)}
+    ${match.winner?'<div class="bracket-controls" style="color:#16804a;font-size:10px;font-weight:800">본선 진출 확정</div>':''}
   </div>`;
+}
+function playoffPenaltyBoardHtml(match){
+  if(!isTiedMatch(match))return '';
+  const home=match.homePenaltyScore,away=match.awayPenaltyScore;
+  const result=home!=null&&away!=null?(Number(home)===Number(away)?'승부차기 동점 · 추가 킥 후 점수 갱신':`승부차기 ${home} : ${away}`):'양 팀 승부차기 점수를 입력하세요';
+  return `<div class="penalty-board"><div class="penalty-title">⚽ 플레이오프 승부차기 점수판</div><div class="penalty-row"><span class="penalty-team">${esc(match.home)}</span><input type="number" min="0" step="1" value="${home??''}" placeholder="홈" data-po-penalty="${esc(match.id)}" data-side="home" ${adminUnlocked?'':'disabled'}><span class="vs">PK</span><input type="number" min="0" step="1" value="${away??''}" placeholder="원정" data-po-penalty="${esc(match.id)}" data-side="away" ${adminUnlocked?'':'disabled'}><span class="penalty-team">${esc(match.away)}</span></div><div class="penalty-result">${result}</div></div>`;
 }
 function bracketView() {
   if(!state.groups.length)return '<div class="panel"><h2>토너먼트</h2><div class="empty" style="margin-top:16px">그룹 추첨을 먼저 진행해주세요.</div></div>';
   const complete=allGroupMatchesComplete(); const placements=finalPlacements();
   const rounds=state.bracket.map((round,ri)=>`<div class="round"><h3 class="round-title">${esc(round.name)}</h3>${round.matches.map(match=>bracketMatchHtml(match,ri)).join('')}</div>`).join('');
+  const playoffLosers=state.playoffMatches.filter(m=>m.winner).map(m=>m.winner===m.home?m.away:m.home).filter(Boolean);
+  const eliminated=[...state.eliminatedTeams,...playoffLosers];
+  const playoffDone=state.playoffMatches.length>0&&state.playoffMatches.every(m=>m.winner);
+  const playoffSection=state.playoffMatches.length?`<div class="panel" style="margin-top:18px"><div class="panel-head"><div><h2>토너먼트 진출 플레이오프</h2><div class="desc">통합 리그순위 직행팀을 제외한 플레이오프 진출팀이 본선 티켓을 놓고 단판 승부를 진행합니다.</div></div><span class="pill">${playoffDone?'플레이오프 완료':'경기 진행 중'}</span></div>
+    <div class="notice">본선 직행 ${state.playoffDirectTeams.length}팀 · 플레이오프 ${state.playoffEntrants.length}팀 · 초기 탈락 ${state.eliminatedTeams.length}팀</div>
+    <div class="rounds">${state.playoffMatches.map((match)=>`<div class="round"><h3 class="round-title">본선 진출 결정전</h3>${playoffMatchHtml(match)}</div>`).join('')}</div>
+    <div class="group-grid" style="margin-top:14px">
+      <div class="group-card"><div class="group-title">본선 직행</div>${state.playoffDirectTeams.map(team=>`<div class="team" style="padding:5px 0">${esc(team)}</div>`).join('')}</div>
+      <div class="group-card"><div class="group-title">플레이오프 진출</div>${state.playoffEntrants.map(team=>`<div class="team" style="padding:5px 0">${esc(team)}</div>`).join('')}</div>
+      <div class="group-card"><div class="group-title">탈락</div>${eliminated.length?eliminated.map(team=>`<div class="team" style="padding:5px 0">${esc(team)}</div>`).join(''):'<div class="desc">플레이오프 결과 확정 후 표시됩니다.</div>'}</div>
+    </div>
+    ${playoffDone?'<div class="notice" style="margin-top:12px">플레이오프 승자들이 본선에 합류했습니다. 아래 본선 토너먼트를 진행하세요.</div>':'<div class="warning" style="margin-top:12px">플레이오프 모든 경기의 승자를 확정하면 본선 대진표가 자동 생성됩니다.</div>'}
+  </div>`:'';
   const third=state.thirdPlaceMatch;
   const thirdPlaceHtml=third?`<div class="round" style="margin-top:22px;min-width:260px;max-width:520px"><h3 class="round-title">3·4위 결정전</h3><div class="bracket-match"><div class="bracket-team ${third.winner===third.home?'winner':''}"><span>${esc(third.home)}</span><b>${third.homeScore??'–'}</b></div><div class="bracket-team ${third.winner===third.away?'winner':''}"><span>${esc(third.away)}</span><b>${third.awayScore??'–'}</b></div>${adminUnlocked?`<div class="bracket-controls"><div class="rowform"><input type="number" min="0" step="1" placeholder="홈" aria-label="${esc(third.home)} 점수" value="${third.homeScore??''}" data-third-score="home"><input type="number" min="0" step="1" placeholder="원정" aria-label="${esc(third.away)} 점수" value="${third.awayScore??''}" data-third-score="away"><button class="btn btn-primary btn-small" data-confirm-third-winner>${isTiedMatch(third)?'승부차기 승자 확정':'3위 확정'}</button></div></div>`:''}${penaltyBoardHtml(third,null,true)}${third.winner?'<div class="bracket-controls" style="color:#16804a;font-size:10px;font-weight:800">3위·4위 확정</div>':''}</div></div>`:'';
   const champion=placements[0]?.team;
-  return `<div class="panel"><div class="panel-head"><div><h2>토너먼트 대진표</h2><div class="desc">통합 리그순위 상위 팀 진출 · 모든 경기 승자 확정 시 다음 라운드 자동 생성</div></div>${adminUnlocked?'<button class="btn btn-primary" id="generateBracket">대진표 생성 / 재생성</button>':''}</div>
-    <div class="notice">진출 조건: 각 조별리그 전체 경기 완료 후 통합 리그순위 상위 팀 진출(그룹 수 × 2팀). 준결승 승자는 결승, 패자는 3·4위 결정전에 진출합니다. 토너먼트 동점 경기는 해당 경기 아래 승부차기로 결정합니다.</div>
-    ${!complete?'<div class="warning">조별리그 결과가 모두 입력되지 않았습니다. 모든 조의 경기를 완료해야 토너먼트 대진표를 만들 수 있습니다.</div>':''}
+  return `<div class="panel"><div class="panel-head"><div><h2>토너먼트 대진표</h2><div class="desc">통합 리그순위에 따라 본선 직행 / 진출 플레이오프 / 탈락 팀을 구분합니다.</div></div>${adminUnlocked?'<button class="btn btn-primary" id="generateBracket">진출팀 편성 / 대진표 생성</button>':''}</div>
+    <div class="notice">8팀 참가 기준: 통합 순위 상위 2팀 본선 직행, 다음 4팀 진출 플레이오프, 하위 2팀 탈락. 플레이오프 승자 2팀이 본선에 합류해 4강 토너먼트를 진행합니다. 다른 참가 인원은 전체 인원에 따라 직행·플레이오프·탈락 인원을 자동 산정합니다.</div>
+    ${!complete?'<div class="warning">조별리그 결과가 모두 입력되지 않았습니다. 모든 조의 경기를 완료해야 진출팀을 편성할 수 있습니다.</div>':''}
+    ${playoffSection}
     ${champion?`<div class="champion"><small>🏆 KHL NATIONS LEAGUE CHAMPION</small><strong>${esc(champion)}</strong><small>대회 우승 확정</small></div>`:''}
-    ${state.bracket.length?`<div class="rounds">${rounds}</div>${thirdPlaceHtml}`:`<div class="empty">${complete?'조별리그가 완료됐습니다. 관리자 편집 모드에서 대진표를 생성하세요.':'아직 대진표가 없습니다.'}</div>`}
+    ${state.bracket.length?`<div class="rounds">${rounds}</div>${thirdPlaceHtml}`:`<div class="empty">${state.playoffMatches.length&&!playoffDone?'플레이오프 결과를 기다리는 중입니다.':complete?'진출팀 편성 후 본선 대진표가 표시됩니다.':'아직 대진표가 없습니다.'}</div>`}
     ${placements.length?`<div style="margin-top:18px"><h3>토너먼트 최종 순위</h3><div class="table-wrap"><table><thead><tr><th>최종 순위</th><th>팀</th></tr></thead><tbody>${placements.map(item=>`<tr><td><b>${esc(item.place)}</b></td><td class="team">${esc(item.team)}</td></tr>`).join('')}</tbody></table></div></div>`:''}
   </div>`;
 }
@@ -786,6 +891,7 @@ function handleClick(event) {
   if(target.id==='clearAll'){clearAll();return;}
   if(target.id==='runDraw'){runDraw();return;}
   if(target.id==='generateBracket'){makeBracket();return;}
+  if(target.dataset.confirmPlayoff){confirmPlayoffWinner(target.dataset.confirmPlayoff);return;}
   if(target.dataset.deleteChampion){deleteChampion(target.dataset.deleteChampion);return;}
   if(target.dataset.editChampion){editChampion(target.dataset.editChampion);return;}
   if(target.dataset.moveChampion){moveChampion(target.dataset.moveChampion,target.dataset.direction);return;}
@@ -797,6 +903,8 @@ function handleChange(event) {
   const target=event.target;
   if(target.matches('[data-match-score]')) updateGroupScore(target.dataset.matchScore,target.dataset.side,target.value);
   if(target.matches('[data-ko-score]')) updateBracketScore(Number(target.dataset.round),target.dataset.koScore,target.dataset.side,target.value);
+  if(target.matches('[data-po-score]')) updatePlayoffScore(target.dataset.poScore,target.dataset.side,target.value);
+  if(target.matches('[data-po-penalty]')) updatePlayoffPenaltyScore(target.dataset.poPenalty,target.dataset.side,target.value);
   if(target.matches('[data-ko-penalty]')) updatePenaltyScore(Number(target.dataset.round),target.dataset.koPenalty,target.dataset.side,target.value);
   if(target.matches('[data-third-score]')) updateThirdPlaceScore(target.dataset.thirdScore,target.value);
   if(target.matches('[data-third-penalty]')) updateThirdPlacePenaltyScore(target.dataset.thirdPenalty,target.value);
