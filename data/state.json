@@ -164,14 +164,21 @@
           "homeScore": 1,
           "awayScore": 1,
           "homePenaltyScore": 1,
-          "awayPenaltyScore": null,
-          "winner": null
+          "awayPenaltyScore": 2,
+          "winner": "수원 블루윙즈"
         }
       ]
     }
   ],
   "groupCount": 2,
   "champions": [
+    {
+      "id": "champ_mwxmkzqm_i0hl5n",
+      "tournamentId": "tournament_mwxm4ixq_c2sajx",
+      "season": "2026",
+      "team": "수원 블루윙즈",
+      "source": "auto"
+    },
     {
       "id": "champ_mwvsal1v_cc8xsp",
       "tournamentId": null,
@@ -192,5 +199,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-26T14:05:57.514Z"
+  "updatedAt": "2026-11-26T14:06:00.981Z"
 }
