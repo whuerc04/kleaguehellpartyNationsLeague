@@ -183,10 +183,10 @@
           "home": "대전 하나",
           "away": "울산 HD",
           "homeScore": 4,
-          "awayScore": null,
+          "awayScore": 2,
           "homePenaltyScore": null,
           "awayPenaltyScore": null,
-          "winner": null
+          "winner": "대전 하나"
         }
       ]
     }
@@ -215,5 +215,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:18:11.508Z"
+  "updatedAt": "2026-11-26T14:18:13.877Z"
 }
