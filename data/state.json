@@ -158,10 +158,10 @@
       "home": "부산 아이파크",
       "away": "포항 스틸러스",
       "homeScore": 1,
-      "awayScore": null,
+      "awayScore": 2,
       "homePenaltyScore": null,
       "awayPenaltyScore": null,
-      "winner": null
+      "winner": "포항 스틸러스"
     }
   ],
   "bracket": [],
@@ -189,5 +189,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:17:45.055Z"
+  "updatedAt": "2026-11-26T14:17:48.953Z"
 }
