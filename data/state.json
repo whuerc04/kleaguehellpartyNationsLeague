@@ -136,9 +136,11 @@
           "id": "ko_mwxm4ixq_u7jxgn",
           "home": "포항 스틸러스",
           "away": "광주 FC",
-          "homeScore": null,
-          "awayScore": null,
-          "winner": null
+          "homeScore": 1,
+          "awayScore": 1,
+          "winner": null,
+          "homePenaltyScore": null,
+          "awayPenaltyScore": null
         },
         {
           "id": "ko_mwxm4ixq_g43hhn",
@@ -173,5 +175,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-26T13:53:12.717Z"
+  "updatedAt": "2026-11-26T13:53:16.924Z"
 }
