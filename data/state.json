@@ -214,7 +214,7 @@
     "awayScore": 4,
     "homePenaltyScore": null,
     "awayPenaltyScore": null,
-    "winner": null
+    "winner": "포항 스틸러스"
   },
   "groupCount": 2,
   "champions": [
@@ -246,5 +246,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:18:40.661Z"
+  "updatedAt": "2026-11-26T14:18:47.070Z"
 }
