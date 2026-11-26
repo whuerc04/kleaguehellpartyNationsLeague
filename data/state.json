@@ -163,9 +163,9 @@
           "away": "수원 블루윙즈",
           "homeScore": 1,
           "awayScore": 1,
-          "winner": null,
-          "homePenaltyScore": null,
-          "awayPenaltyScore": null
+          "homePenaltyScore": 1,
+          "awayPenaltyScore": null,
+          "winner": null
         }
       ]
     }
@@ -192,5 +192,5 @@
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye"
   ],
-  "updatedAt": "2026-11-26T13:57:51.935Z"
+  "updatedAt": "2026-11-26T14:05:57.514Z"
 }
