@@ -69,7 +69,7 @@
       "home": "광주 FC",
       "away": "포항 스틸러스",
       "homeScore": null,
-      "awayScore": null
+      "awayScore": 5
     },
     {
       "id": "gm_mwxmlt3e_bbo085",
@@ -152,5 +152,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:06:57.218Z"
+  "updatedAt": "2026-11-26T14:06:59.685Z"
 }
