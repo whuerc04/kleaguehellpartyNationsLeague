@@ -150,8 +150,8 @@
       "homeScore": 1,
       "awayScore": 1,
       "homePenaltyScore": 5,
-      "awayPenaltyScore": null,
-      "winner": null
+      "awayPenaltyScore": 4,
+      "winner": "울산 HD"
     },
     {
       "id": "po_mwxmzvxe_6xcetc",
@@ -164,7 +164,33 @@
       "winner": "포항 스틸러스"
     }
   ],
-  "bracket": [],
+  "bracket": [
+    {
+      "name": "4강",
+      "matches": [
+        {
+          "id": "ko_mwxn0dri_l7h4ca",
+          "home": "수원 블루윙즈",
+          "away": "포항 스틸러스",
+          "homeScore": null,
+          "awayScore": null,
+          "homePenaltyScore": null,
+          "awayPenaltyScore": null,
+          "winner": null
+        },
+        {
+          "id": "ko_mwxn0dri_5wo97n",
+          "home": "대전 하나",
+          "away": "울산 HD",
+          "homeScore": null,
+          "awayScore": null,
+          "homePenaltyScore": null,
+          "awayPenaltyScore": null,
+          "winner": null
+        }
+      ]
+    }
+  ],
   "thirdPlaceMatch": null,
   "groupCount": 2,
   "champions": [
@@ -189,5 +215,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:17:55.388Z"
+  "updatedAt": "2026-11-26T14:18:00.314Z"
 }
