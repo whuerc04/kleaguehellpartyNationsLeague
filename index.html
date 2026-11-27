@@ -21,6 +21,7 @@
 
 /* Motion pack: broadcast-style transitions with reduced-motion support */
 @keyframes viewEnter{from{opacity:0;transform:translate3d(0,12px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+#view.no-motion,#view.no-motion *{animation:none!important}
 @keyframes cardEnter{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes statPop{0%{transform:scale(.94);opacity:.65}65%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
 @keyframes heroGlow{0%,100%{transform:translate3d(0,0,0);opacity:.28}50%{transform:translate3d(-16px,10px,0);opacity:.52}}
@@ -228,7 +229,7 @@ function renderStats() {
   $('#statGroups').textContent = state.groups.length;
   $('#statMatches').textContent = state.matches.filter(m => m.homeScore !== null && m.awayScore !== null).length;
 }
-function render() {
+function render({animate=true}={}) {
   recordChampionIfNeeded();
   renderTabs(); renderStats();
   const view = $('#view');
@@ -238,7 +239,13 @@ function render() {
   if (subTab === 'standings') view.innerHTML = standingsView();
   if (subTab === 'bracket') view.innerHTML = bracketView();
   if (subTab === 'history') view.innerHTML = championsView();
-  // Restart the entrance motion whenever a section is rendered.
+  // 탭 전환 등 화면이 바뀔 때만 등장 모션을 재생한다. 점수 입력/저장 후 재렌더링은 모션 없이 조용히 갱신한다.
+  if (!animate) {
+    view.classList.add('no-motion');
+    view.classList.remove('motion-enter');
+    return;
+  }
+  view.classList.remove('no-motion');
   view.classList.remove('motion-enter');
   void view.offsetWidth;
   view.classList.add('motion-enter');
@@ -251,8 +258,8 @@ function renderPreservingUi() {
   const activeData = active && active.dataset ? {...active.dataset} : null;
   const activeTag = active?.tagName;
   const scrollY = window.scrollY;
-  const horizontal = [...document.querySelectorAll('.rounds')].map(el => ({key:el.dataset.roundTrack || '', left:el.scrollLeft}));
-  render();
+  const horizontal = [...document.querySelectorAll('.rounds')].map(el => ({key:el.dataset.roundTrack || '', left:el.scrollLeft, count:el.querySelectorAll('.round').length}));
+  render({animate:false});
   if (activeData && activeTag) {
     const candidate = [...document.querySelectorAll(activeTag.toLowerCase())].find(el =>
       Object.entries(activeData).every(([key,value]) => el.dataset?.[key] === value));
@@ -265,7 +272,18 @@ function renderPreservingUi() {
   }
   horizontal.forEach(item => {
     const el = [...document.querySelectorAll('.rounds')].find(node => (node.dataset.roundTrack || '') === item.key);
-    if (el) el.scrollLeft = item.left;
+    if (el) {
+      el.style.scrollBehavior = 'auto';
+      el.style.scrollSnapType = 'none';
+      el.scrollLeft = item.left;
+      requestAnimationFrame(() => { el.style.scrollSnapType = ''; el.style.scrollBehavior = ''; });
+      // 새 라운드(예: 결승)가 추가되면 그 칼럼이 보이도록 오른쪽으로 이동
+      const cols = el.querySelectorAll('.round');
+      if (item.count && cols.length > item.count) {
+        const target = cols[item.count];
+        requestAnimationFrame(() => el.scrollTo({left: Math.max(0, target.offsetLeft - el.offsetLeft - 3), behavior: 'smooth'}));
+      }
+    }
   });
   window.scrollTo({top:scrollY, behavior:'auto'});
 }
@@ -891,14 +909,13 @@ function playoffPenaltyBoardHtml(match){
 function bracketView() {
   if(!state.groups.length)return '<div class="panel"><h2>토너먼트</h2><div class="empty" style="margin-top:16px">그룹 추첨을 먼저 진행해주세요.</div></div>';
   const complete=allGroupMatchesComplete(); const placements=finalPlacements();
+  const playoffColumn=state.playoffMatches.length?`<div class="round"><h3 class="round-title">본선 진출 결정전</h3>${state.playoffMatches.map(match=>playoffMatchHtml(match)).join('')}</div>`:'';
   const rounds=state.bracket.map((round,ri)=>`<div class="round"><h3 class="round-title">${esc(round.name)}</h3>${round.matches.map(match=>bracketMatchHtml(match,ri)).join('')}</div>`).join('');
   const playoffLosers=state.playoffMatches.filter(m=>m.winner).map(m=>m.winner===m.home?m.away:m.home).filter(Boolean);
   const eliminated=[...state.eliminatedTeams,...playoffLosers];
   const playoffDone=state.playoffMatches.length>0&&state.playoffMatches.every(m=>m.winner);
   const playoffSection=state.playoffMatches.length?`<div class="panel" style="margin-top:18px"><div class="panel-head"><div><h2>토너먼트 진출 플레이오프</h2><div class="desc">통합 리그순위 직행팀을 제외한 플레이오프 진출팀이 본선 티켓을 놓고 단판 승부를 진행합니다.</div></div><span class="pill">${playoffDone?'플레이오프 완료':'경기 진행 중'}</span></div>
     <div class="notice">본선 직행 ${state.playoffDirectTeams.length}팀 · 플레이오프 ${state.playoffEntrants.length}팀 · 초기 탈락 ${state.eliminatedTeams.length}팀</div>
-    <div class="rounds-nav"><span class="rounds-hint">← → 버튼, 마우스 휠 또는 드래그로 플레이오프 경기를 좌우로 넘길 수 있습니다.</span><button type="button" data-round-scroll="playoff" data-dir="-1" aria-label="이전 경기">←</button><button type="button" data-round-scroll="playoff" data-dir="1" aria-label="다음 경기">→</button></div>
-    <div class="rounds" data-round-track="playoff">${state.playoffMatches.map((match)=>`<div class="round"><h3 class="round-title">본선 진출 결정전</h3>${playoffMatchHtml(match)}</div>`).join('')}</div>
     <div class="group-grid" style="margin-top:14px">
       <div class="group-card"><div class="group-title">본선 직행</div>${state.playoffDirectTeams.map(team=>`<div class="team" style="padding:5px 0">${esc(team)}</div>`).join('')}</div>
       <div class="group-card"><div class="group-title">플레이오프 진출</div>${state.playoffEntrants.map(team=>`<div class="team" style="padding:5px 0">${esc(team)}</div>`).join('')}</div>
@@ -914,7 +931,7 @@ function bracketView() {
     ${!complete?'<div class="warning">조별리그 결과가 모두 입력되지 않았습니다. 모든 조의 경기를 완료해야 진출팀을 편성할 수 있습니다.</div>':''}
     ${playoffSection}
     ${champion?`<div class="champion"><small>🏆 KHL NATIONS LEAGUE CHAMPION</small><strong>${esc(champion)}</strong><small>대회 우승 확정</small></div>`:''}
-    ${state.bracket.length?`<div class="rounds-nav"><span class="rounds-hint">← → 버튼, 마우스 휠 또는 드래그로 라운드를 좌우로 넘길 수 있습니다.</span><button type="button" data-round-scroll="main" data-dir="-1" aria-label="이전 라운드">←</button><button type="button" data-round-scroll="main" data-dir="1" aria-label="다음 라운드">→</button></div><div class="rounds" data-round-track="main">${rounds}${thirdPlaceHtml}</div>`:`<div class="empty">${state.playoffMatches.length&&!playoffDone?'플레이오프 결과를 기다리는 중입니다.':complete?'진출팀 편성 후 본선 대진표가 표시됩니다.':'아직 대진표가 없습니다.'}</div>`}
+    ${(state.bracket.length||state.playoffMatches.length)?`<div class="rounds-nav"><span class="rounds-hint">← → 버튼, 마우스 휠 또는 드래그로 플레이오프 → 본선 라운드를 좌우로 넘길 수 있습니다.</span><button type="button" data-round-scroll="main" data-dir="-1" aria-label="이전 라운드">←</button><button type="button" data-round-scroll="main" data-dir="1" aria-label="다음 라운드">→</button></div><div class="rounds" data-round-track="main">${playoffColumn}${rounds}${thirdPlaceHtml}</div>`:`<div class="empty">${state.playoffMatches.length&&!playoffDone?'플레이오프 결과를 기다리는 중입니다.':complete?'진출팀 편성 후 본선 대진표가 표시됩니다.':'아직 대진표가 없습니다.'}</div>`}
     ${placements.length?`<div style="margin-top:18px"><h3>토너먼트 최종 순위</h3><div class="table-wrap"><table><thead><tr><th>최종 순위</th><th>팀</th></tr></thead><tbody>${placements.map(item=>`<tr><td><b>${esc(item.place)}</b></td><td class="team">${esc(item.team)}</td></tr>`).join('')}</tbody></table></div></div>`:''}
   </div>`;
 }
