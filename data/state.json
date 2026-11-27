@@ -144,78 +144,28 @@
   ],
   "playoffMatches": [
     {
-      "id": "po_mwxmzvxe_zk0dco",
+      "id": "po_mwylwfyz_4bs5zr",
       "home": "울산 HD",
       "away": "서울 FC",
-      "homeScore": 1,
-      "awayScore": 1,
-      "homePenaltyScore": 5,
-      "awayPenaltyScore": 4,
-      "winner": "울산 HD"
-    },
-    {
-      "id": "po_mwxmzvxe_6xcetc",
-      "home": "부산 아이파크",
-      "away": "포항 스틸러스",
-      "homeScore": 1,
-      "awayScore": 2,
+      "homeScore": null,
+      "awayScore": null,
       "homePenaltyScore": null,
       "awayPenaltyScore": null,
-      "winner": "포항 스틸러스"
-    }
-  ],
-  "bracket": [
-    {
-      "name": "4강",
-      "matches": [
-        {
-          "id": "ko_mwxn0dri_l7h4ca",
-          "home": "수원 블루윙즈",
-          "away": "포항 스틸러스",
-          "homeScore": 5,
-          "awayScore": 2,
-          "homePenaltyScore": null,
-          "awayPenaltyScore": null,
-          "winner": "수원 블루윙즈"
-        },
-        {
-          "id": "ko_mwxn0dri_5wo97n",
-          "home": "대전 하나",
-          "away": "울산 HD",
-          "homeScore": 4,
-          "awayScore": 2,
-          "homePenaltyScore": null,
-          "awayPenaltyScore": null,
-          "winner": "대전 하나"
-        }
-      ]
+      "winner": null
     },
     {
-      "name": "결승",
-      "matches": [
-        {
-          "id": "ko_mwxn0vso_cner0c",
-          "home": "수원 블루윙즈",
-          "away": "대전 하나",
-          "homeScore": 1,
-          "awayScore": 0,
-          "homePenaltyScore": null,
-          "awayPenaltyScore": null,
-          "winner": "수원 블루윙즈"
-        }
-      ]
+      "id": "po_mwylwfyz_1fwoi3",
+      "home": "부산 아이파크",
+      "away": "포항 스틸러스",
+      "homeScore": null,
+      "awayScore": null,
+      "homePenaltyScore": null,
+      "awayPenaltyScore": null,
+      "winner": null
     }
   ],
-  "thirdPlaceMatch": {
-    "id": "third_mwxn0vso_xmzlw9",
-    "home": "포항 스틸러스",
-    "away": "울산 HD",
-    "homeScore": 5,
-    "awayScore": 4,
-    "homePenaltyScore": null,
-    "awayPenaltyScore": null,
-    "winner": "포항 스틸러스"
-  },
+  "bracket": [],
+  "thirdPlaceMatch": null,
   "groupCount": 2,
   "champions": [
     {
@@ -240,11 +190,11 @@
       "source": "manual"
     }
   ],
-  "tournamentId": "tournament_mwxmzvxe_jv546x",
+  "tournamentId": "tournament_mwylwfyz_cb14jc",
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-26T14:18:47.070Z"
+  "updatedAt": "2026-11-27T06:34:41.785Z"
 }
