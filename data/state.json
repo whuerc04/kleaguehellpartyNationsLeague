@@ -197,7 +197,7 @@
           "id": "ko_mwylxn82_j4096h",
           "home": "수원 블루윙즈",
           "away": "부산 아이파크",
-          "homeScore": null,
+          "homeScore": 5,
           "awayScore": null,
           "homePenaltyScore": null,
           "awayPenaltyScore": null,
@@ -246,5 +246,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-27T06:35:37.872Z"
+  "updatedAt": "2026-11-27T06:35:42.726Z"
 }
