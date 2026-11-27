@@ -12,13 +12,6 @@
   "groupCount": 2,
   "champions": [
     {
-      "id": "champ_mwxn19wm_7jw7s3",
-      "tournamentId": "tournament_mwxmzvxe_jv546x",
-      "season": "2026",
-      "team": "수원 블루윙즈",
-      "source": "auto"
-    },
-    {
       "id": "champ_mwvsal1v_cc8xsp",
       "tournamentId": null,
       "season": "2025-2026",
@@ -37,7 +30,8 @@
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye",
-    "tournament_mwxm4ixq_c2sajx"
+    "tournament_mwxm4ixq_c2sajx",
+    "tournament_mwxmzvxe_jv546x"
   ],
-  "updatedAt": "2026-11-27T06:35:52.464Z"
+  "updatedAt": "2026-11-27T06:36:56.337Z"
 }
