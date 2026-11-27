@@ -182,7 +182,7 @@
           "id": "ko_mwylwo2y_9w37h1",
           "home": "대전 하나",
           "away": "부산 아이파크",
-          "homeScore": null,
+          "homeScore": 2,
           "awayScore": null,
           "homePenaltyScore": null,
           "awayPenaltyScore": null,
@@ -222,5 +222,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-27T06:35:30.509Z"
+  "updatedAt": "2026-11-27T06:35:32.524Z"
 }
