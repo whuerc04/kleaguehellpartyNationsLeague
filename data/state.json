@@ -1,221 +1,14 @@
 {
   "version": 2,
-  "teams": [
-    "서울 FC",
-    "부산 아이파크",
-    "수원 블루윙즈",
-    "울산 HD",
-    "전북 현대",
-    "대전 하나",
-    "포항 스틸러스",
-    "광주 FC"
-  ],
-  "groups": [
-    {
-      "name": "A조",
-      "teams": [
-        "부산 아이파크",
-        "광주 FC",
-        "대전 하나",
-        "포항 스틸러스"
-      ]
-    },
-    {
-      "name": "B조",
-      "teams": [
-        "전북 현대",
-        "울산 HD",
-        "수원 블루윙즈",
-        "서울 FC"
-      ]
-    }
-  ],
-  "matches": [
-    {
-      "id": "gm_mwxmlt3e_tst2o6",
-      "group": "A조",
-      "home": "부산 아이파크",
-      "away": "광주 FC",
-      "homeScore": 2,
-      "awayScore": 3
-    },
-    {
-      "id": "gm_mwxmlt3e_eb253c",
-      "group": "A조",
-      "home": "부산 아이파크",
-      "away": "대전 하나",
-      "homeScore": 4,
-      "awayScore": 5
-    },
-    {
-      "id": "gm_mwxmlt3e_6h5k0k",
-      "group": "A조",
-      "home": "부산 아이파크",
-      "away": "포항 스틸러스",
-      "homeScore": 9,
-      "awayScore": 5
-    },
-    {
-      "id": "gm_mwxmlt3e_tyw3xg",
-      "group": "A조",
-      "home": "광주 FC",
-      "away": "대전 하나",
-      "homeScore": 5,
-      "awayScore": 6
-    },
-    {
-      "id": "gm_mwxmlt3e_ou2lhz",
-      "group": "A조",
-      "home": "광주 FC",
-      "away": "포항 스틸러스",
-      "homeScore": 1,
-      "awayScore": 5
-    },
-    {
-      "id": "gm_mwxmlt3e_bbo085",
-      "group": "A조",
-      "home": "대전 하나",
-      "away": "포항 스틸러스",
-      "homeScore": 5,
-      "awayScore": 3
-    },
-    {
-      "id": "gm_mwxmlt3e_p7wmto",
-      "group": "B조",
-      "home": "전북 현대",
-      "away": "울산 HD",
-      "homeScore": 1,
-      "awayScore": 2
-    },
-    {
-      "id": "gm_mwxmlt3e_389lwo",
-      "group": "B조",
-      "home": "전북 현대",
-      "away": "수원 블루윙즈",
-      "homeScore": 3,
-      "awayScore": 5
-    },
-    {
-      "id": "gm_mwxmlt3e_ym83jo",
-      "group": "B조",
-      "home": "전북 현대",
-      "away": "서울 FC",
-      "homeScore": 1,
-      "awayScore": 3
-    },
-    {
-      "id": "gm_mwxmlt3e_ndml62",
-      "group": "B조",
-      "home": "울산 HD",
-      "away": "수원 블루윙즈",
-      "homeScore": 1,
-      "awayScore": 5
-    },
-    {
-      "id": "gm_mwxmlt3e_788kpg",
-      "group": "B조",
-      "home": "울산 HD",
-      "away": "서울 FC",
-      "homeScore": 5,
-      "awayScore": 3
-    },
-    {
-      "id": "gm_mwxmlt3e_hmow3f",
-      "group": "B조",
-      "home": "수원 블루윙즈",
-      "away": "서울 FC",
-      "homeScore": 5,
-      "awayScore": 3
-    }
-  ],
-  "playoffDirectTeams": [
-    "수원 블루윙즈",
-    "대전 하나"
-  ],
-  "playoffEntrants": [
-    "울산 HD",
-    "부산 아이파크",
-    "포항 스틸러스",
-    "서울 FC"
-  ],
-  "eliminatedTeams": [
-    "광주 FC",
-    "전북 현대"
-  ],
-  "playoffMatches": [
-    {
-      "id": "po_mwylwfyz_4bs5zr",
-      "home": "울산 HD",
-      "away": "서울 FC",
-      "homeScore": 1,
-      "awayScore": 2,
-      "homePenaltyScore": null,
-      "awayPenaltyScore": null,
-      "winner": "서울 FC"
-    },
-    {
-      "id": "po_mwylwfyz_1fwoi3",
-      "home": "부산 아이파크",
-      "away": "포항 스틸러스",
-      "homeScore": 2,
-      "awayScore": 1,
-      "homePenaltyScore": null,
-      "awayPenaltyScore": null,
-      "winner": "부산 아이파크"
-    }
-  ],
-  "bracket": [
-    {
-      "name": "4강",
-      "matches": [
-        {
-          "id": "ko_mwylwo2y_gb0mnx",
-          "home": "수원 블루윙즈",
-          "away": "서울 FC",
-          "homeScore": 3,
-          "awayScore": 1,
-          "homePenaltyScore": null,
-          "awayPenaltyScore": null,
-          "winner": "수원 블루윙즈"
-        },
-        {
-          "id": "ko_mwylwo2y_9w37h1",
-          "home": "대전 하나",
-          "away": "부산 아이파크",
-          "homeScore": 2,
-          "awayScore": 5,
-          "homePenaltyScore": null,
-          "awayPenaltyScore": null,
-          "winner": "부산 아이파크"
-        }
-      ]
-    },
-    {
-      "name": "결승",
-      "matches": [
-        {
-          "id": "ko_mwylxn82_j4096h",
-          "home": "수원 블루윙즈",
-          "away": "부산 아이파크",
-          "homeScore": 5,
-          "awayScore": null,
-          "homePenaltyScore": null,
-          "awayPenaltyScore": null,
-          "winner": null
-        }
-      ]
-    }
-  ],
-  "thirdPlaceMatch": {
-    "id": "third_mwylxn82_kcqq2p",
-    "home": "서울 FC",
-    "away": "대전 하나",
-    "homeScore": null,
-    "awayScore": null,
-    "homePenaltyScore": null,
-    "awayPenaltyScore": null,
-    "winner": null
-  },
+  "teams": [],
+  "groups": [],
+  "matches": [],
+  "playoffDirectTeams": [],
+  "playoffEntrants": [],
+  "eliminatedTeams": [],
+  "playoffMatches": [],
+  "bracket": [],
+  "thirdPlaceMatch": null,
   "groupCount": 2,
   "champions": [
     {
@@ -240,11 +33,11 @@
       "source": "manual"
     }
   ],
-  "tournamentId": "tournament_mwylwfyz_cb14jc",
+  "tournamentId": null,
   "ignoredChampionTournamentIds": [
     "tournament_mww395go_tkrs9h",
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-27T06:35:42.726Z"
+  "updatedAt": "2026-11-27T06:35:52.464Z"
 }
