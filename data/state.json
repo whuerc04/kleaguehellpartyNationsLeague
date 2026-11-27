@@ -176,13 +176,28 @@
           "awayScore": 1,
           "homePenaltyScore": null,
           "awayPenaltyScore": null,
-          "winner": null
+          "winner": "수원 블루윙즈"
         },
         {
           "id": "ko_mwylwo2y_9w37h1",
           "home": "대전 하나",
           "away": "부산 아이파크",
           "homeScore": 2,
+          "awayScore": 5,
+          "homePenaltyScore": null,
+          "awayPenaltyScore": null,
+          "winner": "부산 아이파크"
+        }
+      ]
+    },
+    {
+      "name": "결승",
+      "matches": [
+        {
+          "id": "ko_mwylxn82_j4096h",
+          "home": "수원 블루윙즈",
+          "away": "부산 아이파크",
+          "homeScore": null,
           "awayScore": null,
           "homePenaltyScore": null,
           "awayPenaltyScore": null,
@@ -191,7 +206,16 @@
       ]
     }
   ],
-  "thirdPlaceMatch": null,
+  "thirdPlaceMatch": {
+    "id": "third_mwylxn82_kcqq2p",
+    "home": "서울 FC",
+    "away": "대전 하나",
+    "homeScore": null,
+    "awayScore": null,
+    "homePenaltyScore": null,
+    "awayPenaltyScore": null,
+    "winner": null
+  },
   "groupCount": 2,
   "champions": [
     {
@@ -222,5 +246,5 @@
     "tournament_mww6tyqb_qscrye",
     "tournament_mwxm4ixq_c2sajx"
   ],
-  "updatedAt": "2026-11-27T06:35:32.524Z"
+  "updatedAt": "2026-11-27T06:35:37.872Z"
 }
